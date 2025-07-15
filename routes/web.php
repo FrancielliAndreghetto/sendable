@@ -13,5 +13,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 });
 
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
+Route::prefix('v1')->group(function () {
+    Route::post('/auth/login', \App\Http\Controllers\Api\V1\Auth\LoginController::class);
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/whatsapp/messages/schedule', \App\Http\Controllers\Api\V1\ScheduleWhatsappMessageController::class);
+    });
+});
+
+require __DIR__ . '/settings.php';
+require __DIR__ . '/auth.php';
