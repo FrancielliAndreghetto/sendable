@@ -2,28 +2,34 @@
 
 namespace App\Providers;
 
+use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Repositories\Contracts\Whatsapp\Instances\WhatsappInstanceRepositoryInterface;
+use App\Repositories\Contracts\Whatsapp\Messages\WhatsappMessageRepositoryInterface;
+use App\Repositories\Eloquent\UserRepository;
+use App\Repositories\Eloquent\Whatsapp\Instances\WhatsappInstanceRepository;
+use App\Repositories\Eloquent\Whatsapp\Messages\WhatsappMessageRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register()
     {
         $this->app->bind(
-            \App\Repositories\Contracts\UserRepositoryInterface::class,
-            \App\Repositories\Eloquent\UserRepository::class,
+            UserRepositoryInterface::class,
+            UserRepository::class,
         );
 
         $this->app->bind(
-            \App\Repositories\Contracts\Whatsapp\WhatsappMessageRepositoryInterface::class,
-            \App\Repositories\Eloquent\Whatsapp\WhatsappMessageRepository::class
+            WhatsappMessageRepositoryInterface::class,
+            WhatsappMessageRepository::class
+        );
+
+        $this->app->bind(
+            WhatsappInstanceRepositoryInterface::class,
+            WhatsappInstanceRepository::class
         );
     }
-    /**
-     * Bootstrap any application services.
-     */
+
     public function boot(): void
     {
         //

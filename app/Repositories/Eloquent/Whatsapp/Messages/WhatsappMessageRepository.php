@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Repositories\Eloquent\Whatsapp;
+namespace App\Repositories\Eloquent\Whatsapp\Messages;
 
 use App\Models\WhatsappMessage;
-use App\Repositories\Contracts\Whatsapp\WhatsappMessageRepositoryInterface;
+use App\Repositories\Contracts\Whatsapp\Messages\WhatsappMessageRepositoryInterface;
 
 class WhatsappMessageRepository implements WhatsappMessageRepositoryInterface
 {

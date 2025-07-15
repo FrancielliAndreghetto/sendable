@@ -1,0 +1,270 @@
+openapi: 3.0.3
+info:
+  title: WhatsApp Instances API
+  description: API para gerenciamento de instâncias do WhatsApp (criar, conectar, desconectar, listar, deletar, reiniciar).
+  version: 1.0.0
+servers:
+  - url: /api
+    description: API base URL (relativo)
+
+tags:
+  - name: Whatsapp Instances
+    description: Endpoints para gerenciar instâncias WhatsApp
+
+paths:
+  /whatsapp/instances:
+    get:
+      tags:
+        - Whatsapp Instances
+      summary: Lista todas as instâncias WhatsApp
+      operationId: getInstances
+      responses:
+        '200':
+          description: Lista de instâncias retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        number:
+                          type: string
+                        token:
+                          type: string
+                        external_id:
+                          type: string
+                        connected_at:
+                          type: string
+                          format: date-time
+        '500':
+          description: Erro interno no servidor
+
+    post:
+      tags:
+        - Whatsapp Instances
+      summary: Cria uma nova instância WhatsApp
+      operationId: createInstance
+      requestBody:
+        description: Dados para criação da instância WhatsApp
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - number
+                - token
+              properties:
+                name:
+                  type: string
+                  example: MinhaInstancia
+                number:
+                  type: string
+                  example: "+5511999999999"
+                token:
+                  type: string
+                  example: "abc123token"
+      responses:
+        '200':
+          description: Instância criada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  response:
+                    type: object
+                    description: Resposta da API externa WhatsApp
+        '500':
+          description: Falha ao criar instância
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                  details:
+                    type: string
+                    nullable: true
+
+  /whatsapp/instances/{name}/connect:
+    get:
+      tags:
+        - Whatsapp Instances
+      summary: Conecta uma instância WhatsApp pelo nome
+      operationId: connectInstance
+      parameters:
+        - name: name
+          in: path
+          description: Nome da instância WhatsApp para conectar
+          required: true
+          schema:
+            type: string
+            example: MinhaInstancia
+      responses:
+        '200':
+          description: Instância conectada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+        '500':
+          description: Falha ao conectar instância
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  details:
+                    type: string
+                    nullable: true
+
+  /whatsapp/instances/{name}/disconnect:
+    delete:
+      tags:
+        - Whatsapp Instances
+      summary: Desconecta uma instância WhatsApp pelo nome
+      operationId: disconnectInstance
+      parameters:
+        - name: name
+          in: path
+          description: Nome da instância WhatsApp para desconectar
+          required: true
+          schema:
+            type: string
+            example: MinhaInstancia
+      responses:
+        '200':
+          description: Instância desconectada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+        '500':
+          description: Falha ao desconectar instância
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  details:
+                    type: string
+                    nullable: true
+
+  /whatsapp/instances/{name}:
+    delete:
+      tags:
+        - Whatsapp Instances
+      summary: Remove uma instância WhatsApp pelo nome
+      operationId: deleteInstance
+      parameters:
+        - name: name
+          in: path
+          description: Nome da instância WhatsApp para remover
+          required: true
+          schema:
+            type: string
+            example: MinhaInstancia
+      responses:
+        '200':
+          description: Instância removida com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+        '500':
+          description: Falha ao remover instância
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  details:
+                    type: string
+                    nullable: true
+
+  /whatsapp/instances/{name}/reload:
+    post:
+      tags:
+        - Whatsapp Instances
+      summary: Reinicia uma instância WhatsApp pelo nome
+      operationId: reloadInstance
+      parameters:
+        - name: name
+          in: path
+          description: Nome da instância WhatsApp para reiniciar
+          required: true
+          schema:
+            type: string
+            example: MinhaInstancia
+      responses:
+        '200':
+          description: Instância reiniciada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+        '500':
+          description: Falha ao reiniciar instância
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+                  details:
+                    type: string
+                    nullable: true

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Contracts\Whatsapp;
+namespace App\Repositories\Contracts\Whatsapp\Messages;
 
 use App\Models\WhatsappMessage;
 

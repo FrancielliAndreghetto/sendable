@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Services\Whatsapp;
+namespace App\Services\Whatsapp\Contracts;
 
-use App\DTOs\Whatsapp\SendMessageDTO;
+use App\DTOs\Whatsapp\Instances\CreateWhatsappInstanceDTO;
 
-interface WhatsappProviderInterface
+interface WhatsappInstanceServiceInterface
 {
-    public function sendMessage(SendMessageDTO $dto): array;
     public function getInstances(): array;
-    public function saveInstance(string $name, string $number, string $token): array;
+    public function createInstance(CreateWhatsappInstanceDTO $dto): array;
     public function deleteInstance(string $name): array;
     public function connectInstance(string $name): array;
     public function disconnectInstance(string $name): array;
