@@ -30,7 +30,7 @@ abstract class AbstractWhatsappService
             return json_decode($response->getBody()->getContents(), true);
         } catch (\Throwable $e) {
             logger()->error("Erro ao fazer request para API WhatsApp: " . $e->getMessage());
-            throw new RuntimeException('Erro na comunicação com a API WhatsApp.');
+            throw new RuntimeException('Erro na comunicação com a API WhatsApp: ' . $e->getMessage());
         }
     }
 }

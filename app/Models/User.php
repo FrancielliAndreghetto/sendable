@@ -6,14 +6,15 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasUuids, HasFactory, Notifiable;
+    use HasUuids, HasFactory, Notifiable, HasApiTokens;
 
-    protected $table = 'users';
-    protected $keyType = 'string';
     public $incrementing = false;
+    protected $keyType = 'string';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'name',
@@ -33,5 +34,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function partner()
+    {
+        return $this->belongsTo(Partner::class);
     }
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b7531f73c7a0f0d5c4e7e8690992afc1",
+    "content-hash": "493c5297576a4ca622c77016731e3798",
     "packages": [
         {
             "name": "brick/math",
@@ -65,6 +65,52 @@
                 }
             ],
             "time": "2025-03-29T13:50:30+00:00"
+        },
+        {
+            "name": "caouecs/laravel-lang",
+            "version": "7.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/caouecs/lang.git",
+                "reference": "2cb9932f781415f1669ce27d29e5b86399ab164a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/caouecs/lang/zipball/2cb9932f781415f1669ce27d29e5b86399ab164a",
+                "reference": "2cb9932f781415f1669ce27d29e5b86399ab164a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*"
+            },
+            "suggest": {
+                "andrey-helldar/laravel-lang-publisher": "Easy installation and update of translation files for your project",
+                "arcanedev/laravel-lang": "Translations manager and checker for Laravel 5",
+                "overtrue/laravel-lang": "Command to add languages in your project"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "caouecs",
+                    "email": "caouecs@caouecs.net"
+                }
+            ],
+            "description": "Languages for Laravel",
+            "keywords": [
+                "lang",
+                "languages",
+                "laravel",
+                "lpm"
+            ],
+            "support": {
+                "source": "https://github.com/caouecs/lang/tree/7.0.3"
+            },
+            "abandoned": "https://github.com/Laravel-Lang/lang",
+            "time": "2020-08-23T08:17:21+00:00"
         },
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -1395,6 +1441,70 @@
                 "source": "https://github.com/laravel/prompts/tree/v0.3.6"
             },
             "time": "2025-07-07T14:17:42+00:00"
+        },
+        {
+            "name": "laravel/sanctum",
+            "version": "v4.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/sanctum.git",
+                "reference": "e4c09e69aecd5a383e0c1b85a6bb501c997d7491"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/sanctum/zipball/e4c09e69aecd5a383e0c1b85a6bb501c997d7491",
+                "reference": "e4c09e69aecd5a383e0c1b85a6bb501c997d7491",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "illuminate/console": "^11.0|^12.0",
+                "illuminate/contracts": "^11.0|^12.0",
+                "illuminate/database": "^11.0|^12.0",
+                "illuminate/support": "^11.0|^12.0",
+                "php": "^8.2",
+                "symfony/console": "^7.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.6",
+                "orchestra/testbench": "^9.0|^10.0",
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^11.3"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Laravel\\Sanctum\\SanctumServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laravel\\Sanctum\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                }
+            ],
+            "description": "Laravel Sanctum provides a featherweight authentication system for SPAs and simple APIs.",
+            "keywords": [
+                "auth",
+                "laravel",
+                "sanctum"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel/sanctum/issues",
+                "source": "https://github.com/laravel/sanctum"
+            },
+            "time": "2025-07-01T15:49:32+00:00"
         },
         {
             "name": "laravel/serializable-closure",
@@ -9165,12 +9275,12 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.2"
     },
-    "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
 }

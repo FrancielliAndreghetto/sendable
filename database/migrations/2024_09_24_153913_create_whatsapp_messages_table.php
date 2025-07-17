@@ -13,6 +13,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('partner_id');
             $table->uuid('instance_id');
+            $table->string('custom_code')->nullable()->index();
 
             $table->string('name');
             $table->string('whatsapp_number');
@@ -21,7 +22,6 @@ return new class extends Migration
             $table->timestamp('scheduled_date')->nullable();
             $table->integer('status_id')->default(0);
 
-            $table->string('custom_code')->nullable()->index();
             $table->timestamp('sent_at')->nullable();
             $table->text('error_message')->nullable();
             $table->string('delivery_status')->nullable();

@@ -4,17 +4,21 @@ namespace App\Http\Controllers\Api\Whatsapp\Instances;
 
 use App\Http\Controllers\Controller;
 use App\UseCases\Whatsapp\Instances\ConnectWhatsappInstanceUseCase;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
-class ConnectInstanceController extends Controller
+class ConnectWhatsappInstanceController extends Controller
 {
     public function __construct(
         protected ConnectWhatsappInstanceUseCase $useCase
     ) {}
 
-    public function __invoke(string $name)
+    public function __invoke(Request $request, string $uuid): JsonResponse
     {
+        $partnerId = $request->attributes->get('partner_id');
+
         try {
-            $response = $this->useCase->execute($name);
+            $response = $this->useCase->execute($uuid, $partnerId);
 
             return response()->json([
                 'success' => true,
@@ -25,7 +29,7 @@ class ConnectInstanceController extends Controller
 
             return response()->json([
                 'success' => false,
-                'error' => 'Falha ao conectar com a instância.',
+                'error' => 'Falha ao conectar da instância.',
                 'details' => config('app.debug') ? $e->getMessage() : null
             ], 500);
         }

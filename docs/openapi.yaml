@@ -41,7 +41,7 @@ paths:
                           type: string
                         token:
                           type: string
-                        external_id:
+                        api_id:
                           type: string
                         connected_at:
                           type: string

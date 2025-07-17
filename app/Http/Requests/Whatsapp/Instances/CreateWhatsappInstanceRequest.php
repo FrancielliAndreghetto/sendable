@@ -4,7 +4,7 @@ namespace App\Http\Requests\Whatsapp\Instances;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateInstanceRequest extends FormRequest
+class CreateWhatsappInstanceRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -15,8 +15,12 @@ class CreateInstanceRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'number' => 'required|string',
-            'token' => 'required|string',
+            'number' => [
+                'required',
+                'string',
+                'regex:/^\d+[\.@\w-]+$/'
+            ],
+            'token' => 'nullable|string',
         ];
     }
 }

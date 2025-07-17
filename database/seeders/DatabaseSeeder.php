@@ -3,21 +3,22 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Partner;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $partner = Partner::factory()->create([
+            'name' => 'Parceiro Teste',
+            'slug' => 'parceiro-teste',
+        ]);
 
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'partner_id' => $partner->id,
         ]);
     }
 }

@@ -1,31 +1,35 @@
 FROM php:8.2-fpm
 
-# Instala dependências PHP
-RUN apt-get update && apt-get install -y \
-    git unzip libzip-dev libonig-dev libpng-dev libxml2-dev zip curl \
-    nodejs npm \
-    && docker-php-ext-install pdo_mysql zip mbstring exif pcntl bcmath gd
+ENV COMPOSER_ALLOW_SUPERUSER=1 \
+    COMPOSER_HOME=/composer
 
-# Instala Composer
+RUN apt-get update && apt-get install -y --fix-missing \
+    git \
+    curl \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    locales \
+    zip \
+    unzip \
+    libonig-dev \
+    libxml2-dev \
+    libzip-dev \
+    nodejs \
+    npm \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install gd pdo pdo_mysql mbstring zip exif pcntl bcmath opcache
+
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copia o composer.json e package.json para otimizar build
-COPY composer.json composer.lock ./
-COPY package.json package-lock.json ./
-
-# Instala dependências PHP e Node.js
-RUN composer install --no-dev --optimize-autoloader
-RUN npm install
-
-# Copia todo código
 COPY . .
 
-# Build dos assets (React + Vite ou Mix)
-RUN npm run build
+RUN composer install --no-interaction --optimize-autoloader \
+    && npm install && npm run build
 
-RUN chown -R www-data:www-data storage bootstrap/cache
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 EXPOSE 9000
 

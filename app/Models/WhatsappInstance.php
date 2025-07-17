@@ -1,8 +1,5 @@
 <?php
 
-// Estrutura completa do backend (seguindo Clean Architecture, Laravel 12, UUIDs, Multi-tenant)
-
-// 1. Model: WhatsappInstance.php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -19,10 +16,11 @@ class WhatsappInstance extends Model
     protected $fillable = [
         'partner_id',
         'user_id',
+        'api_id',
+        'custom_code',
         'name',
         'whatsapp_number',
         'token',
-        'api_id',
         'is_active',
         'connected_at',
         'disconnected_at'

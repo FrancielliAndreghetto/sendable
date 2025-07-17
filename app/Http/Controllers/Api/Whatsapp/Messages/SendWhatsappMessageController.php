@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Whatsapp\Messages\SendWhatsappMessageRequest;
 use App\UseCases\Whatsapp\Messages\SendWhatsappMessageUseCase;
 
-class SendMessageController extends Controller
+class SendWhatsappMessageController extends Controller
 {
     public function __construct(
         protected SendWhatsappMessageUseCase $useCase

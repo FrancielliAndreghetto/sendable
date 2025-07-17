@@ -1,0 +1,31 @@
+<?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\Auth\LoginController;
+use App\Http\Controllers\Api\Whatsapp\Instances\ConnectWhatsappInstanceController;
+use App\Http\Controllers\Api\Whatsapp\Instances\CreateWhatsappInstanceController;
+use App\Http\Controllers\Api\Whatsapp\Instances\DeleteWhatsappInstanceController;
+use App\Http\Controllers\Api\Whatsapp\Instances\DisconnectWhatsappInstanceController;
+use App\Http\Controllers\Api\Whatsapp\Instances\ListWhatsappInstancesController;
+use App\Http\Controllers\Api\Whatsapp\Instances\ReloadWhatsappInstanceController;
+use App\Http\Controllers\Api\Whatsapp\Messages\SendWhatsappMessageController;
+use App\Http\Middleware\InjectPartnerId;
+
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
+
+Route::post('/auth/login', LoginController::class);
+
+Route::prefix('whatsapp')->middleware(['auth:sanctum', InjectPartnerId::class])->group(function () {
+    Route::get('/instances', ListWhatsappInstancesController::class);
+    Route::post('/instances', CreateWhatsappInstanceController::class);
+    Route::delete('/instances/{uuid}', DeleteWhatsappInstanceController::class);
+
+    Route::post('/instances/connect/{uuid}', ConnectWhatsappInstanceController::class);
+    Route::delete('/instances/disconnect/{uuid}', DisconnectWhatsappInstanceController::class);
+    Route::post('/instances/reload/{uuid}', ReloadWhatsappInstanceController::class);
+
+    Route::post('/messages/send', SendWhatsappMessageController::class);
+});

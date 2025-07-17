@@ -12,13 +12,13 @@ return new class extends Migration
             $table->uuid('id')->primary();
 
             $table->uuid('partner_id')->index();
-            $table->uuid('user_id');
+            $table->string('api_id')->nullable()->index();
+            $table->string('custom_code')->nullable()->index();
 
             $table->string('name');
             $table->string('whatsapp_number')->nullable();
 
-            $table->string('token');
-            $table->string('api_id');
+            $table->string('token')->nullable();
             $table->boolean('is_active')->default(true);
 
             $table->timestamp('connected_at')->nullable();
@@ -27,7 +27,6 @@ return new class extends Migration
             $table->timestamps();
 
             $table->unique(['partner_id', 'api_id']);
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
