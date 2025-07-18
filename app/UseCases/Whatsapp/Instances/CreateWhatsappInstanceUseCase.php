@@ -62,7 +62,7 @@ class CreateWhatsappInstanceUseCase
                 'name'   => $name,
                 'number' => $dto->number,
                 'token'  => $dto->token,
-            ])
+            ], $dto->partner_id)
         );
 
         if (!isset($response['instance'])) {

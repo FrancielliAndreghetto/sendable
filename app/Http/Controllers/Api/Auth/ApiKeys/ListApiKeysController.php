@@ -1,35 +1,35 @@
 <?php
 
-namespace App\Http\Controllers\Api\Whatsapp\Instances;
+namespace App\Http\Controllers\Api\Auth\ApiKeys;
 
 use App\Http\Controllers\Controller;
-use App\UseCases\Whatsapp\Instances\DeleteWhatsappInstanceUseCase;
+use App\UseCases\Auth\ApiKeys\ListApiKeysUseCase;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class DeleteWhatsappInstanceController extends Controller
+class ListApiKeysController extends Controller
 {
     public function __construct(
-        protected DeleteWhatsappInstanceUseCase $useCase
+        protected ListApiKeysUseCase $useCase
     ) {}
 
-    public function __invoke(Request $request, string $uuid): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
         $partnerId = $request->attributes->get('partner_id');
 
         try {
-            $response = $this->useCase->execute($uuid, $partnerId);
+            $response = $this->useCase->execute($partnerId);
 
             return response()->json([
                 'success' => true,
                 'response' => $response,
             ]);
         } catch (\Throwable $e) {
-            logger()->error('Erro ao deletar a instância: ' . $e->getMessage());
+            logger()->error('Erro ao listar Api Keys: ' . $e->getMessage());
 
             return response()->json([
                 'success' => false,
-                'error' => 'Falha ao deletar a instância.',
+                'error' => 'Falha ao listar Api Keys.',
                 'details' => config('app.debug') ? $e->getMessage() : null
             ], 500);
         }

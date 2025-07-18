@@ -17,8 +17,10 @@ class CreateWhatsappInstanceController extends Controller
 
     public function __invoke(CreateWhatsappInstanceRequest $request): JsonResponse
     {
+        $partnerId = $request->attributes->get('partner_id');
+
         try {
-            $dto = new CreateWhatsappInstanceDTO($request->validated());
+            $dto = new CreateWhatsappInstanceDTO($request->validated(), $partnerId);
 
             $response = $this->useCase->execute($dto);
 

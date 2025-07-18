@@ -13,8 +13,11 @@ class ListWhatsappInstancesUseCase
         protected WhatsappInstanceRepositoryInterface $instanceRepository
     ) {}
 
-    public function execute(string $partnerId): Collection
+    public function execute(string $partnerId): array
     {
-        return $this->instanceRepository->findAllByPartner($partnerId);
+        return [
+            'message' => 'Instâncias consultadas com sucesso',
+            'instances' => $this->instanceRepository->findAllByPartner($partnerId)
+        ];
     }
 }

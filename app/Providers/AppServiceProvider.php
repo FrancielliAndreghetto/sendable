@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Repositories\Contracts\Auth\ApiKeyRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Repositories\Contracts\Whatsapp\Instances\WhatsappInstanceRepositoryInterface;
 use App\Repositories\Contracts\Whatsapp\Messages\WhatsappMessageRepositoryInterface;
+use App\Repositories\Eloquent\Auth\ApiKeyRepository;
 use App\Repositories\Eloquent\UserRepository;
 use App\Repositories\Eloquent\Whatsapp\Instances\WhatsappInstanceRepository;
 use App\Repositories\Eloquent\Whatsapp\Messages\WhatsappMessageRepository;
@@ -27,6 +29,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             WhatsappInstanceRepositoryInterface::class,
             WhatsappInstanceRepository::class
+        );
+
+        $this->app->bind(
+            ApiKeyRepositoryInterface::class,
+            ApiKeyRepository::class
         );
     }
 

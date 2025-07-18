@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\Auth\ApiKeys\CreateApiKeyController;
+use App\Http\Controllers\Api\Auth\ApiKeys\DeleteApiKeyController;
+use App\Http\Controllers\Api\Auth\ApiKeys\ListApiKeysController;
+use App\Http\Controllers\Api\Auth\Authenticate\AuthenticateUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Whatsapp\Instances\ConnectWhatsappInstanceController;
 use App\Http\Controllers\Api\Whatsapp\Instances\CreateWhatsappInstanceController;
 use App\Http\Controllers\Api\Whatsapp\Instances\DeleteWhatsappInstanceController;
@@ -10,15 +13,16 @@ use App\Http\Controllers\Api\Whatsapp\Instances\DisconnectWhatsappInstanceContro
 use App\Http\Controllers\Api\Whatsapp\Instances\ListWhatsappInstancesController;
 use App\Http\Controllers\Api\Whatsapp\Instances\ReloadWhatsappInstanceController;
 use App\Http\Controllers\Api\Whatsapp\Messages\SendWhatsappMessageController;
+use App\Http\Middleware\AuthSanctumOrApiKey;
 use App\Http\Middleware\InjectPartnerId;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::post('/auth/login', LoginController::class);
+Route::post('/auth/login', AuthenticateUserController::class);
 
-Route::prefix('whatsapp')->middleware(['auth:sanctum', InjectPartnerId::class])->group(function () {
+Route::prefix('whatsapp')->middleware([AuthSanctumOrApiKey::class])->group(function () {
     Route::get('/instances', ListWhatsappInstancesController::class);
     Route::post('/instances', CreateWhatsappInstanceController::class);
     Route::delete('/instances/{uuid}', DeleteWhatsappInstanceController::class);
@@ -29,3 +33,7 @@ Route::prefix('whatsapp')->middleware(['auth:sanctum', InjectPartnerId::class])-
 
     Route::post('/messages/send', SendWhatsappMessageController::class);
 });
+
+Route::post('/keys', CreateApiKeyController::class)->middleware([AuthSanctumOrApiKey::class]);
+Route::delete('/keys/{uuid}', DeleteApiKeyController::class)->middleware([AuthSanctumOrApiKey::class]);
+Route::GET('/keys', ListApiKeysController::class)->middleware([AuthSanctumOrApiKey::class]);
