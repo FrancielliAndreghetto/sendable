@@ -1,0 +1,885 @@
+openapi: 3.0.0
+info:
+  title: Documentação API - Agendamento e Envio de Mensagens em Diferentes Plataformas
+  version: 1.0.0
+  description: API para autenticação, gerenciamento de API Keys e instâncias e envios de mensagens
+
+servers:
+  - url: http://localhost:8000/api
+
+paths:
+  # ===== AUTH =====
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Autenticar usuário e gerar token de acesso
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: usuario@exemplo.com
+                password:
+                  type: string
+                  format: password
+                  example: senha123
+      responses:
+        '200':
+          description: Autenticado com sucesso, retorna usuário e token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Autenticado com sucesso.
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 1
+                          name:
+                            type: string
+                            example: João Silva
+                          email:
+                            type: string
+                            example: usuario@exemplo.com
+                      token:
+                        type: string
+                        example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
+        '401':
+          description: Credenciais inválidas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Credenciais inválidas.
+        '429':
+          description: Muitas tentativas, bloqueio temporário
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Muitas tentativas, aguarde um momento antes de tentar novamente.
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Falha ao autenticar.
+
+  # ===== API Keys =====
+  /keys:
+    post:
+      tags:
+        - Api Keys
+      summary: Criar uma nova API Key
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  example: Minha Chave API
+      responses:
+        '201':
+          description: Api Key criada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Api Key Gerada com sucesso.
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: "123e4567-e89b-12d3-a456-426614174000"
+                      name:
+                        type: string
+                        example: Minha Chave API
+                      partner_id:
+                        type: string
+                        example: "partner_abc123"
+                      user_id:
+                        type: string
+                        nullable: true
+                        example: "user_456def"
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: "2025-07-28T14:32:00Z"
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: "2025-07-28T14:32:00Z"
+        '500':
+          description: Falha ao criar Api Key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Falha ao criar Api Key.
+
+    get:
+      tags:
+        - Api Keys
+      summary: Listar todas as API Keys
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de Api Keys
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Api Keys consultadas com sucesso.
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          example: "123e4567-e89b-12d3-a456-426614174000"
+                        name:
+                          type: string
+                          example: Minha Chave API
+                        partner_id:
+                          type: string
+                          example: "partner_abc123"
+                        user_id:
+                          type: string
+                          nullable: true
+                          example: "user_456def"
+                        created_at:
+                          type: string
+                          format: date-time
+                          example: "2025-07-28T14:32:00Z"
+                        updated_at:
+                          type: string
+                          format: date-time
+                          example: "2025-07-28T14:32:00Z"
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                        example: 1
+                      last_page:
+                        type: integer
+                        example: 1
+                      per_page:
+                        type: integer
+                        example: 15
+                      total:
+                        type: integer
+                        example: 3
+                      next_page_url:
+                        type: string
+                        nullable: true
+                        example: null
+                      prev_page_url:
+                        type: string
+                        nullable: true
+                        example: null
+        '401':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Não autorizado.
+        '500':
+          description: Erro interno
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Erro interno.
+
+  /keys/{uuid}:
+    delete:
+      tags:
+        - Api Keys
+      summary: Deletar uma API Key
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: UUID da API Key a ser deletada
+      responses:
+        '200':
+          description: Api Key deletada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Api Key deletada com sucesso.
+        '404':
+          description: Api Key não encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Api Key não encontrada.
+        '401':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Não autorizado.
+        '500':
+          description: Erro interno
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Erro interno.
+
+  # ===== WHATSAPP =====
+  
+  /whatsapp/instances:
+    post:
+      tags:
+        - Whatsapp
+      summary: Criar uma nova instância WhatsApp
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - number
+              properties:
+                name:
+                  type: string
+                  example: Instância 1
+                number:
+                  type: string
+                  example: "5511999999999"
+                  description: Número formatado com código de país (somente dígitos)
+                token:
+                  type: string
+                  nullable: true
+                  example: "token_opcional"
+      responses:
+        '201':
+          description: Instância criada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Instância criada com sucesso.
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: "01981b72-2f30-726a-a5e2-1a99564541c9"
+                      partner_id:
+                        type: string
+                        format: uuid
+                        example: "0198144e-fb0e-7033-8cfc-cd2de4cfe01e"
+                      external_id:
+                        type: string
+                        format: uuid
+                        example: "7ac78c26-9d8c-4146-89b0-cb9b9260ca3a"
+                      external_name:
+                        type: string
+                        example: "01981b72-2f30-726a-a5e2-1a99564541c9_teste"
+                      custom_code:
+                        type: string
+                        nullable: true
+                        example: null
+                      name:
+                        type: string
+                        example: "teste"
+                      whatsapp_number:
+                        type: string
+                        nullable: true
+                        example: null
+                      token:
+                        type: string
+                        nullable: true
+                        example: null
+                      is_active:
+                        type: integer
+                        example: 1
+                      connected_at:
+                        type: string
+                        format: date-time
+                        example: "2025-07-18 02:52:04"
+                      disconnected_at:
+                        type: string
+                        format: date-time
+                        nullable: true
+                        example: null
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: "2025-07-18T02:52:04.000000Z"
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: "2025-07-18T02:52:05.000000Z"
+        '400':
+          description: Dados inválidos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Dados inválidos.
+        '500':
+          description: Falha ao criar instância
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Falha ao criar instância.
+    get:
+      tags:
+        - Whatsapp
+      summary: Listar instâncias WhatsApp
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista paginada de instâncias
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Instâncias consultadas com sucesso.
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          example: "01981b72-2f30-726a-a5e2-1a99564541c9"
+                        partner_id:
+                          type: string
+                          format: uuid
+                          example: "0198144e-fb0e-7033-8cfc-cd2de4cfe01e"
+                        external_id:
+                          type: string
+                          format: uuid
+                          example: "7ac78c26-9d8c-4146-89b0-cb9b9260ca3a"
+                        external_name:
+                          type: string
+                          example: "01981b72-2f30-726a-a5e2-1a99564541c9_teste"
+                        custom_code:
+                          type: string
+                          nullable: true
+                          example: null
+                        name:
+                          type: string
+                          example: "teste"
+                        whatsapp_number:
+                          type: string
+                          nullable: true
+                          example: null
+                        token:
+                          type: string
+                          nullable: true
+                          example: null
+                        is_active:
+                          type: integer
+                          example: 1
+                        connected_at:
+                          type: string
+                          format: date-time
+                          example: "2025-07-18 02:52:04"
+                        disconnected_at:
+                          type: string
+                          format: date-time
+                          nullable: true
+                          example: null
+                        created_at:
+                          type: string
+                          format: date-time
+                          example: "2025-07-18T02:52:04.000000Z"
+                        updated_at:
+                          type: string
+                          format: date-time
+                          example: "2025-07-18T02:52:05.000000Z"
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                        example: 1
+                      last_page:
+                        type: integer
+                        example: 1
+                      per_page:
+                        type: integer
+                        example: 15
+                      total:
+                        type: integer
+                        example: 3
+                      next_page_url:
+                        type: string
+                        nullable: true
+                        example: null
+                      prev_page_url:
+                        type: string
+                        nullable: true
+                        example: null
+        '401':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Não autorizado.
+        '500':
+          description: Erro interno
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Falha ao listar instâncias.
+
+  /whatsapp/instances/{uuid}:
+    delete:
+      tags:
+        - Whatsapp
+      summary: Deletar uma instância WhatsApp
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: UUID da instância WhatsApp
+      responses:
+        '200':
+          description: Instância deletada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Instância deletada com sucesso.
+        '404':
+          description: Instância não encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Nenhuma instância encontrada com o ID fornecido.
+        '401':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Não autorizado.
+        '500':
+          description: Erro interno
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Falha ao deletar a instância.
+
+  /whatsapp/instances/connect/{uuid}:
+    post:
+      tags:
+        - Whatsapp
+      summary: Gerar QRCode para conexão de instância WhatsApp
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: UUID da instância WhatsApp
+      responses:
+        '200':
+          description: QRCode gerado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: QRCode para conexão gerado com sucesso.
+                  data:
+                    type: string
+                    description: QRCode em base64
+                    example: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA..."
+        '404':
+          description: Instância WhatsApp não encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Nenhuma instância encontrada com o id fornecido.
+        '401':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Não autorizado.
+        '500':
+          description: Erro interno
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Falha ao conectar da instância.
+
+  /whatsapp/instances/disconnect/{uuid}:
+    post:
+      tags:
+        - Whatsapp
+      summary: Desconectar uma instância WhatsApp
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: UUID da instância WhatsApp
+      responses:
+        '200':
+          description: Instância desconectada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Instância desconectada com sucesso.
+        '404':
+          description: Instância não encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Nenhuma instância encontrada com o id fornecido.
+        '401':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Não autorizado.
+        '500':
+          description: Erro interno
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Falha ao desconectar da instância.
+
+  /whatsapp/instances/reload/{uuid}:
+    post:
+      tags:
+        - Whatsapp
+      summary: Recarregar (reconectar) instância WhatsApp e gerar QRCode
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: UUID da instância WhatsApp
+      responses:
+        '200':
+          description: QRCode para reconexão gerado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: QRCode para reconexão gerado com sucesso.
+                  data:
+                    type: string
+                    description: QRCode em base64
+                    example: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA..."
+        '404':
+          description: Instância não encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Nenhuma instância encontrada com o id fornecido.
+        '401':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Não autorizado.
+        '500':
+          description: Erro interno
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Falha ao recarregar a instância.
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []

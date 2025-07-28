@@ -13,5 +13,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 });
 
+Route::get('/docs', function () {
+    return response()->file(public_path('swagger-ui/index.html'));
+});
+
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
