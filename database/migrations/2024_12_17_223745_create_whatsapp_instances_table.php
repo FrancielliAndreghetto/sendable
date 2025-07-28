@@ -12,8 +12,10 @@ return new class extends Migration
             $table->uuid('id')->primary();
 
             $table->uuid('partner_id')->index();
-            $table->string('api_id')->nullable()->index();
             $table->string('custom_code')->nullable()->index();
+
+            $table->string('external_id')->nullable()->index();
+            $table->string('external_name');
 
             $table->string('name');
             $table->string('whatsapp_number')->nullable();
@@ -26,7 +28,7 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->unique(['partner_id', 'api_id']);
+            $table->unique(['partner_id', 'external_id']);
         });
     }
 

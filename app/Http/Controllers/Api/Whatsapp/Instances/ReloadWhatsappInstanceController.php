@@ -21,18 +21,12 @@ class ReloadWhatsappInstanceController extends Controller
         try {
             $response = $this->useCase->execute($uuid, $partnerId);
 
-            return response()->json([
-                'success' => true,
-                'response' => $response,
-            ]);
-        } catch (\Throwable $e) {
-            logger()->error('Erro ao recarregar instância: ' . $e->getMessage());
-
-            return response()->json([
-                'success' => false,
-                'error' => 'Falha ao recarregar a instância.',
-                'details' => config('app.debug') ? $e->getMessage() : null
-            ], 500);
+            return $this->successResponse('QRCode para reconexão gerado com sucesso.', $response);
+        } catch (\Throwable $exception) {
+            return $this->errorResponse(
+                'Falha ao recarregar a instância.',
+                $exception
+            );
         }
     }
 }

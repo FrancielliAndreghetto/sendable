@@ -20,18 +20,12 @@ class DeleteApiKeyController extends Controller
         try {
             $response = $this->useCase->execute($uuid, $partnerId);
 
-            return response()->json([
-                'success' => true,
-                'response' => $response,
-            ]);
-        } catch (\Throwable $e) {
-            logger()->error('Erro ao deletar a Api Key: ' . $e->getMessage());
-
-            return response()->json([
-                'success' => false,
-                'error' => 'Falha ao deletar a Api Key.',
-                'details' => config('app.debug') ? $e->getMessage() : null
-            ], 500);
+            return $this->successResponse('Api Key deletada com sucesso', $response);
+        } catch (\Throwable $exception) {
+            return $this->errorResponse(
+                'Falha ao deletar a Api Key.',
+                $exception
+            );
         }
     }
 }

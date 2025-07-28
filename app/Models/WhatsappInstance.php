@@ -16,8 +16,9 @@ class WhatsappInstance extends Model
     protected $fillable = [
         'partner_id',
         'user_id',
-        'api_id',
+        'external_id',
         'custom_code',
+        'external_name',
         'name',
         'whatsapp_number',
         'token',

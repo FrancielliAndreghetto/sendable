@@ -13,7 +13,7 @@ class DisconnectWhatsappInstanceUseCase
         protected WhatsappInstanceRepositoryInterface $instanceRepository
     ) {}
 
-    public function execute(string $uuid, string $partnerId): array
+    public function execute(string $uuid, string $partnerId): bool
     {
         $instance = $this->instanceRepository->findByUuidAndPartner($uuid, $partnerId);
 
@@ -27,8 +27,6 @@ class DisconnectWhatsappInstanceUseCase
             throw new Exception($response['message'] ?? 'Erro ao desconectar da instância na API externa');
         }
 
-        return [
-            'message' => 'Instância desconectada com sucesso.',
-        ];
+        return true;
     }
 }

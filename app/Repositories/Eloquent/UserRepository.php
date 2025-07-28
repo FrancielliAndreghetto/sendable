@@ -7,8 +7,15 @@ use App\Repositories\Contracts\UserRepositoryInterface;
 
 class UserRepository implements UserRepositoryInterface
 {
+    protected User $model;
+
+    public function __construct(User $model)
+    {
+        $this->model = $model;
+    }
+
     public function findByEmail(string $email): ?User
     {
-        return User::where('email', $email)->first();
+        return $this->model->where('email', $email)->first();
     }
 }

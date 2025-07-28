@@ -16,22 +16,18 @@ class ListApiKeysController extends Controller
     public function __invoke(Request $request): JsonResponse
     {
         $partnerId = $request->attributes->get('partner_id');
+        $perPage = $request->query('per_page', 15);
+        $page = $request->query('page', 1);
 
         try {
-            $response = $this->useCase->execute($partnerId);
+            $response = $this->useCase->execute($partnerId, (int) $perPage, (int) $page);
 
-            return response()->json([
-                'success' => true,
-                'response' => $response,
-            ]);
-        } catch (\Throwable $e) {
-            logger()->error('Erro ao listar Api Keys: ' . $e->getMessage());
-
-            return response()->json([
-                'success' => false,
-                'error' => 'Falha ao listar Api Keys.',
-                'details' => config('app.debug') ? $e->getMessage() : null
-            ], 500);
+            return $this->paginatedResponse('Api Keys consultadas com sucesso.', $response);
+        } catch (\Throwable $exception) {
+            return $this->errorResponse(
+                'Falha ao listar Api Keys.',
+                $exception
+            );
         }
     }
 }

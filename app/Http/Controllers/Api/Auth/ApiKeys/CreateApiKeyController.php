@@ -24,18 +24,12 @@ class CreateApiKeyController extends Controller
 
             $response = $this->useCase->execute($dto);
 
-            return response()->json([
-                'success' => true,
-                'response' => $response,
-            ]);
-        } catch (\Throwable $e) {
-            logger()->error('Erro ao criar Api Key: ' . $e->getMessage());
-
-            return response()->json([
-                'success' => false,
-                'error' => 'Falha ao criar Api Key.',
-                'details' => config('app.debug') ? $e->getMessage() : null
-            ], 500);
+            return $this->successResponse('Api Key Gerada com sucesso.', $response, 201);
+        } catch (\Throwable $exception) {
+            return $this->errorResponse(
+                'Falha ao criar Api Key.',
+                $exception
+            );
         }
     }
 }

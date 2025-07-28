@@ -13,7 +13,7 @@ class ReloadWhatsappInstanceUseCase
         protected WhatsappInstanceRepositoryInterface $instanceRepository
     ) {}
 
-    public function execute(string $uuid, string $partnerId): array
+    public function execute(string $uuid, string $partnerId): mixed
     {
         $instance = $this->instanceRepository->findByUuidAndPartner($uuid, $partnerId);
 
@@ -27,9 +27,6 @@ class ReloadWhatsappInstanceUseCase
             throw new Exception($response['message'] ?? 'Erro ao reconectar à instância na API externa');
         }
 
-        return [
-            'message' => 'QRCode para reconexão gerado com sucesso',
-            'qrCode' => $response['base64']
-        ];
+        return $response['base64'];
     }
 }

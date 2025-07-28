@@ -17,7 +17,7 @@ class WhatsappInstanceService extends AbstractWhatsappService implements Whatsap
     {
         return $this->request('POST', '/instance/create', [
             'form_params' => [
-                'instanceName' => $dto->name,
+                'instanceName' => $dto->external_name,
                 'integration' => 'WHATSAPP-BAILEYS',
                 'token' => $dto->token,
                 'number' => $dto->number,

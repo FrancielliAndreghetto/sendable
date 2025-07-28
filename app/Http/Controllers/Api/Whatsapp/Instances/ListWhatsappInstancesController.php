@@ -20,18 +20,12 @@ class ListWhatsappInstancesController extends Controller
         try {
             $response = $this->useCase->execute($partnerId);
 
-            return response()->json([
-                'success' => true,
-                'response' => $response,
-            ]);
-        } catch (\Throwable $e) {
-            logger()->error('Erro ao listar instâncias: ' . $e->getMessage());
-
-            return response()->json([
-                'success' => false,
-                'error' => 'Falha ao listar instâncias.',
-                'details' => config('app.debug') ? $e->getMessage() : null
-            ], 500);
+            return $this->paginatedResponse('Instâncias consultadas com sucesso.', $response);
+        } catch (\Throwable $exception) {
+            return $this->errorResponse(
+                'Falha ao listar instâncias.',
+                $exception
+            );
         }
     }
 }

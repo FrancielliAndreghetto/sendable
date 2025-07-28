@@ -14,12 +14,12 @@ class DeleteWhatsappInstanceUseCase
         protected WhatsappInstanceRepositoryInterface $instanceRepository
     ) {}
 
-    public function execute(string $uuid, string $partnerId): array
+    public function execute(string $uuid, string $partnerId): bool
     {
         return DB::transaction(fn() => $this->handleDeletion($uuid, $partnerId));
     }
 
-    private function handleDeletion(string $uuid, string $partnerId): array
+    private function handleDeletion(string $uuid, string $partnerId): bool
     {
         $instance = $this->instanceRepository->findByUuidAndPartner($uuid, $partnerId);
 
@@ -39,8 +39,6 @@ class DeleteWhatsappInstanceUseCase
             throw new Exception('Falha ao excluir a instância localmente.');
         }
 
-        return [
-            'message' => 'Instância deletada com sucesso.',
-        ];
+        return true;
     }
 }

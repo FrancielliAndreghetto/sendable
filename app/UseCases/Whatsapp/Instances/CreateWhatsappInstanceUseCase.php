@@ -7,6 +7,7 @@ use App\Models\WhatsappInstance;
 use App\Repositories\Contracts\Whatsapp\Instances\WhatsappInstanceRepositoryInterface;
 use App\Services\Whatsapp\Contracts\WhatsappInstanceServiceInterface;
 use Exception;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class CreateWhatsappInstanceUseCase
@@ -16,27 +17,30 @@ class CreateWhatsappInstanceUseCase
         protected WhatsappInstanceRepositoryInterface $instanceRepository
     ) {}
 
-    public function execute(CreateWhatsappInstanceDTO $dto): array
+    public function execute(CreateWhatsappInstanceDTO $dto): Model
     {
         return DB::transaction(fn() => $this->handleCreation($dto));
     }
 
-    private function handleCreation(CreateWhatsappInstanceDTO $dto): array
+    private function handleCreation(CreateWhatsappInstanceDTO $dto): Model
     {
+        $existing = $this->instanceRepository->findByNumberAndPartner($dto->number, $dto->partner_id);
+
+        if ($existing) {
+            throw new \Exception('Já existe uma instância com esse número.');
+        }
+
         $instance = $this->createLocalInstance($dto);
         $nameWithId = "{$instance->id}_{$dto->name}";
 
-        $apiResponse = $this->callExternalApi($dto, $nameWithId);
+        $apiResponse = $this->callExternalApi($dto->withExternalName($nameWithId));
 
         $instance->update([
-            'api_id' => $apiResponse['instance']['instanceId'] ?? null,
-            'name'   => $nameWithId,
+            'external_id' => $apiResponse['instance']['instanceId'] ?? null,
+            'external_name'   => $nameWithId,
         ]);
 
-        return [
-            'message' => 'Instância criada co sucesso',
-            'instance' => $instance->fresh()
-        ];
+        return $instance->fresh();
     }
 
     private function createLocalInstance(CreateWhatsappInstanceDTO $dto)
@@ -49,24 +53,18 @@ class CreateWhatsappInstanceUseCase
         ]);
 
         if (!$instance || !$instance->exists) {
-            throw new Exception('Falha ao salvar instância no banco de dados');
+            throw new \Exception('Falha ao salvar instância no banco de dados');
         }
 
         return $instance;
     }
 
-    private function callExternalApi(CreateWhatsappInstanceDTO $dto, string $name): array
+    private function callExternalApi(CreateWhatsappInstanceDTO $dto): array
     {
-        $response = $this->whatsappInstanceService->createInstance(
-            new CreateWhatsappInstanceDTO([
-                'name'   => $name,
-                'number' => $dto->number,
-                'token'  => $dto->token,
-            ], $dto->partner_id)
-        );
+        $response = $this->whatsappInstanceService->createInstance($dto);
 
         if (!isset($response['instance'])) {
-            throw new Exception($response['message'] ?? 'Erro ao criar instância na API externa');
+            throw new \Exception($response['message'] ?? 'Erro ao criar instância na API externa');
         }
 
         return $response;

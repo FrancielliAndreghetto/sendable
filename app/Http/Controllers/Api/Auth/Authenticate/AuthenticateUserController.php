@@ -19,25 +19,21 @@ class AuthenticateUserController extends Controller
     {
         try {
             $dto = new AuthenticateUserDTO($request->validated());
+
             $response = $this->useCase->execute($dto);
 
-            return response()->json([
-                'success' => true,
-                'response' => $response,
-            ]);
-        } catch (AuthenticationException $e) {
-            return response()->json([
-                'success' => false,
-                'error' => 'Credenciais inválidas',
-            ], 401);
-        } catch (\Throwable $e) {
-            logger()->error('Erro ao autenticar: ' . $e->getMessage());
-
-            return response()->json([
-                'success' => false,
-                'error' => 'Falha ao autenticar',
-                'details' => config('app.debug') ? $e->getMessage() : null,
-            ], 500);
+            return $this->successResponse('Autenticado com sucesso.', $response);
+        } catch (AuthenticationException $exception) {
+            return $this->errorResponse(
+                'Credenciais inválidas.',
+                $exception,
+                401
+            );
+        } catch (\Throwable $exception) {
+            return $this->errorResponse(
+                'Falha ao autenticar.',
+                $exception
+            );
         }
     }
 }

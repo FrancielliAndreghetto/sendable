@@ -17,7 +17,7 @@ class WhatsappServiceProvider extends ServiceProvider
             return new Client();
         });
 
-        $this->app->bind(WhatsappMessageServiceInterface::class, WhatsappMessageService::class);
-        $this->app->bind(WhatsappInstanceServiceInterface::class, WhatsappInstanceService::class);
+        $this->app->singleton(WhatsappMessageServiceInterface::class, WhatsappMessageService::class);
+        $this->app->singleton(WhatsappInstanceServiceInterface::class, WhatsappInstanceService::class);
     }
 }

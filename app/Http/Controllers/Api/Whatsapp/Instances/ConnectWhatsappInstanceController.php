@@ -20,18 +20,12 @@ class ConnectWhatsappInstanceController extends Controller
         try {
             $response = $this->useCase->execute($uuid, $partnerId);
 
-            return response()->json([
-                'success' => true,
-                'response' => $response,
-            ]);
-        } catch (\Throwable $e) {
-            logger()->error('Erro ao conectar instância: ' . $e->getMessage());
-
-            return response()->json([
-                'success' => false,
-                'error' => 'Falha ao conectar da instância.',
-                'details' => config('app.debug') ? $e->getMessage() : null
-            ], 500);
+            return $this->successResponse('QRCode para conexão gerado com sucesso.', $response);
+        } catch (\Throwable $exception) {
+            return $this->errorResponse(
+                'Falha ao conectar da instância.',
+                $exception
+            );
         }
     }
 }

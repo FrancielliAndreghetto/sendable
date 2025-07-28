@@ -7,7 +7,6 @@ use App\Http\Requests\Whatsapp\Instances\CreateWhatsappInstanceRequest;
 use App\DTOs\Whatsapp\Instances\CreateWhatsappInstanceDTO;
 use App\UseCases\Whatsapp\Instances\CreateWhatsappInstanceUseCase;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Request;
 
 class CreateWhatsappInstanceController extends Controller
 {
@@ -24,18 +23,12 @@ class CreateWhatsappInstanceController extends Controller
 
             $response = $this->useCase->execute($dto);
 
-            return response()->json([
-                'success' => true,
-                'response' => $response,
-            ]);
-        } catch (\Throwable $e) {
-            logger()->error('Erro ao criar instância: ' . $e->getMessage());
-
-            return response()->json([
-                'success' => false,
-                'error' => 'Falha ao criar a instância.',
-                'details' => config('app.debug') ? $e->getMessage() : null
-            ], 500);
+            return $this->successResponse('Instância criada com sucesso.', $response, 201);
+        } catch (\Throwable $exception) {
+            return $this->errorResponse(
+                'Falha ao criar a instância.',
+                $exception
+            );
         }
     }
 }

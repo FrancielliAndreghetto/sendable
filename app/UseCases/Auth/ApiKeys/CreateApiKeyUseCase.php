@@ -5,6 +5,7 @@ namespace App\UseCases\Auth\ApiKeys;
 use App\DTOs\Auth\ApiKeys\CreateApiKeyDTO;
 use App\Repositories\Contracts\Auth\ApiKeyRepositoryInterface;
 use Exception;
+use Illuminate\Database\Eloquent\Model;
 
 class CreateApiKeyUseCase
 {
@@ -12,7 +13,7 @@ class CreateApiKeyUseCase
         protected ApiKeyRepositoryInterface $apiKeyRepository
     ) {}
 
-    public function execute(CreateApiKeyDTO $dto): array
+    public function execute(CreateApiKeyDTO $dto): Model
     {
         $apiKey = $this->apiKeyRepository->create([
             'partner_id' => $dto->partner_id,
@@ -24,9 +25,6 @@ class CreateApiKeyUseCase
             throw new Exception('Falha ao salvar Api Key no banco de dados');
         }
 
-        return [
-            'message' => 'Api Key Gerada com sucesso.',
-            'key' => $apiKey,
-        ];
+        return $apiKey;
     }
 }

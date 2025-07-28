@@ -7,8 +7,15 @@ use App\Repositories\Contracts\Whatsapp\Messages\WhatsappMessageRepositoryInterf
 
 class WhatsappMessageRepository implements WhatsappMessageRepositoryInterface
 {
+    protected WhatsappMessage $model;
+
+    public function __construct(WhatsappMessage $model)
+    {
+        $this->model = $model;
+    }
+
     public function create(array $data): WhatsappMessage
     {
-        return WhatsappMessage::create($data);
+        return $this->model->create($data);
     }
 }

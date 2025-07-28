@@ -11,7 +11,7 @@ class DeleteApiKeyUseCase
         protected ApiKeyRepositoryInterface $apiKeyRepository
     ) {}
 
-    public function execute(string $uuid, string $partnerId): array
+    public function execute(string $uuid, string $partnerId): bool
     {
         $apiKey = $this->apiKeyRepository->findByUuidAndPartner($uuid, $partnerId);
 
@@ -25,8 +25,6 @@ class DeleteApiKeyUseCase
             throw new Exception('Falha ao excluir a Api Key.');
         }
 
-        return [
-            'message' => 'Api Key deletada com sucesso.',
-        ];
+        return true;
     }
 }
