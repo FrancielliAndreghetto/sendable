@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Api\Auth\ApiKeys\CreateApiKeyController;
 use App\Http\Controllers\Api\Auth\ApiKeys\DeleteApiKeyController;
+use App\Http\Controllers\Api\Auth\ApiKeys\GetApiKeyController;
 use App\Http\Controllers\Api\Auth\ApiKeys\ListApiKeysController;
+use App\Http\Controllers\Api\Auth\ApiKeys\UpdateApiKeyController;
 use App\Http\Controllers\Api\Auth\Authenticate\AuthenticateUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -14,7 +16,6 @@ use App\Http\Controllers\Api\Whatsapp\Instances\ListWhatsappInstancesController;
 use App\Http\Controllers\Api\Whatsapp\Instances\ReloadWhatsappInstanceController;
 use App\Http\Controllers\Api\Whatsapp\Messages\SendWhatsappMessageController;
 use App\Http\Middleware\AuthSanctumOrApiKey;
-use App\Http\Middleware\InjectPartnerId;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -34,6 +35,10 @@ Route::prefix('whatsapp')->middleware([AuthSanctumOrApiKey::class])->group(funct
     Route::post('/messages/send', SendWhatsappMessageController::class);
 });
 
-Route::post('/keys', CreateApiKeyController::class)->middleware([AuthSanctumOrApiKey::class]);
-Route::delete('/keys/{uuid}', DeleteApiKeyController::class)->middleware([AuthSanctumOrApiKey::class]);
-Route::GET('/keys', ListApiKeysController::class)->middleware([AuthSanctumOrApiKey::class]);
+Route::prefix('keys')->middleware([AuthSanctumOrApiKey::class])->group(function () {
+    Route::get('', ListApiKeysController::class);
+    Route::get('/{uuid}', GetApiKeyController::class);
+    Route::post('', CreateApiKeyController::class);
+    Route::delete('/{uuid}', DeleteApiKeyController::class);
+    Route::put('/{uuid}', UpdateApiKeyController::class);
+});

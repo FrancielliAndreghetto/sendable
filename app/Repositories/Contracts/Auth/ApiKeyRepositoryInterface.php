@@ -14,4 +14,5 @@ interface ApiKeyRepositoryInterface
     public function paginateByPartner(string $partnerId, int $perPage = 20, int $page = 1): LengthAwarePaginator;
     public function findByKey(string $key): ?ApiKey;
     public function deleteByUuidAndPartner(string $uuid, string $partnerId): bool;
+    public function updateByUuidAndPartner(ApiKey $apiKey, array $data): ?ApiKey;
 }

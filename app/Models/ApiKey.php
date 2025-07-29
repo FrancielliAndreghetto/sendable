@@ -15,11 +15,19 @@ class ApiKey extends Model
     protected $table = 'api_keys';
 
     protected $fillable = [
-        'id',
         'user_id',
         'partner_id',
         'key',
         'name',
+        'active',
+        'expires_at',
+        'scopes',
+    ];
+
+    protected $casts = [
+        'active' => 'boolean',
+        'expires_at' => 'datetime',
+        'scopes' => 'array',
     ];
 
     protected static function boot()

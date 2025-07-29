@@ -24,7 +24,7 @@ class DeleteWhatsappInstanceUseCase
         $instance = $this->instanceRepository->findByUuidAndPartner($uuid, $partnerId);
 
         if (!$instance) {
-            throw new Exception('Nenhuma instância encontrada com o ID fornecido.');
+            throw new Exception('Nenhuma instância encontrada com o UUID fornecido.');
         }
 
         $response = $this->whatsappInstanceService->deleteInstance($instance->name);

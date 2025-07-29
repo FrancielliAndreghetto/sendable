@@ -18,7 +18,7 @@ class DisconnectWhatsappInstanceUseCase
         $instance = $this->instanceRepository->findByUuidAndPartner($uuid, $partnerId);
 
         if (!$instance) {
-            throw new Exception('Nenhuma instância encontrada com o id fornecido.');
+            throw new Exception('Nenhuma instância encontrada com o UUID fornecido.');
         }
 
         $response = $this->whatsappInstanceService->disconnectInstance($instance->name);

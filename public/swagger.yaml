@@ -105,28 +105,226 @@ paths:
                     example: Falha ao autenticar.
 
   # ===== API Keys =====
-  /keys:
-    post:
-      tags:
-        - Api Keys
-      summary: Criar uma nova API Key
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
+/keys:
+  post:
+    tags:
+      - Api Keys
+    summary: Criar uma nova API Key
+    security:
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - name
+            properties:
+              name:
+                type: string
+                example: Minha Chave API
+              scopes:
+                type: array
+                items:
+                  type: string
+                nullable: true
+                example: ["read", "write"]
+              expires_at:
+                type: string
+                format: date-time
+                nullable: true
+                example: "2025-12-31T23:59:59Z"
+    responses:
+      '201':
+        description: Api Key criada com sucesso
         content:
           application/json:
             schema:
               type: object
-              required:
-                - name
               properties:
-                name:
+                success:
+                  type: boolean
+                  example: true
+                message:
                   type: string
-                  example: Minha Chave API
+                  example: Api Key Gerada com sucesso.
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                      example: "123e4567-e89b-12d3-a456-426614174000"
+                    name:
+                      type: string
+                      example: Minha Chave API
+                    partner_id:
+                      type: string
+                      example: "partner_abc123"
+                    user_id:
+                      type: string
+                      nullable: true
+                      example: "user_456def"
+                    scopes:
+                      type: array
+                      items:
+                        type: string
+                      nullable: true
+                      example: ["read", "write"]
+                    expires_at:
+                      type: string
+                      format: date-time
+                      nullable: true
+                      example: "2025-12-31T23:59:59Z"
+                    created_at:
+                      type: string
+                      format: date-time
+                      example: "2025-07-28T14:32:00Z"
+                    updated_at:
+                      type: string
+                      format: date-time
+                      example: "2025-07-28T14:32:00Z"
+      '500':
+        description: Falha ao criar Api Key
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                message:
+                  type: string
+                  example: Falha ao criar Api Key.
+
+  get:
+    tags:
+      - Api Keys
+    summary: Listar todas as API Keys
+    security:
+      - bearerAuth: []
+    responses:
+      '200':
+        description: Lista de Api Keys
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                message:
+                  type: string
+                  example: Api Keys consultadas com sucesso.
+                data:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: "123e4567-e89b-12d3-a456-426614174000"
+                      name:
+                        type: string
+                        example: Minha Chave API
+                      partner_id:
+                        type: string
+                        example: "partner_abc123"
+                      user_id:
+                        type: string
+                        nullable: true
+                        example: "user_456def"
+                      scopes:
+                        type: array
+                        items:
+                          type: string
+                        nullable: true
+                        example: ["read", "write"]
+                      expires_at:
+                        type: string
+                        format: date-time
+                        nullable: true
+                        example: "2025-12-31T23:59:59Z"
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: "2025-07-28T14:32:00Z"
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: "2025-07-28T14:32:00Z"
+                meta:
+                  type: object
+                  properties:
+                    current_page:
+                      type: integer
+                      example: 1
+                    last_page:
+                      type: integer
+                      example: 1
+                    per_page:
+                      type: integer
+                      example: 15
+                    total:
+                      type: integer
+                      example: 3
+                    next_page_url:
+                      type: string
+                      nullable: true
+                      example: null
+                    prev_page_url:
+                      type: string
+                      nullable: true
+                      example: null
+      '401':
+        description: Não autorizado
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                message:
+                  type: string
+                  example: Não autorizado.
+      '500':
+        description: Erro interno
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                message:
+                  type: string
+                  example: Erro interno.
+
+  /keys/{uuid}:
+    get:
+      tags:
+        - Api Keys
+      summary: Obter uma API Key
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: UUID da API Key a ser consultada
       responses:
-        '201':
-          description: Api Key criada com sucesso
+        '200':
+          description: Api Key consultada com sucesso
           content:
             application/json:
               schema:
@@ -137,7 +335,7 @@ paths:
                     example: true
                   message:
                     type: string
-                    example: Api Key Gerada com sucesso.
+                    example: Api Key consultada com sucesso.
                   data:
                     type: object
                     properties:
@@ -155,6 +353,18 @@ paths:
                         type: string
                         nullable: true
                         example: "user_456def"
+                      active:
+                        type: boolean
+                        example: true
+                      scopes:
+                        type: array
+                        items:
+                          type: string
+                        example: ["read", "write"]
+                      expires_at:
+                        type: string
+                        format: date-time
+                        example: "2025-12-31T23:59:59Z"
                       created_at:
                         type: string
                         format: date-time
@@ -162,9 +372,9 @@ paths:
                       updated_at:
                         type: string
                         format: date-time
-                        example: "2025-07-28T14:32:00Z"
-        '500':
-          description: Falha ao criar Api Key
+                        example: "2025-08-01T10:20:00Z"
+        '404':
+          description: Api Key não encontrada
           content:
             application/json:
               schema:
@@ -175,78 +385,7 @@ paths:
                     example: false
                   message:
                     type: string
-                    example: Falha ao criar Api Key.
-
-    get:
-      tags:
-        - Api Keys
-      summary: Listar todas as API Keys
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Lista de Api Keys
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: Api Keys consultadas com sucesso.
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          format: uuid
-                          example: "123e4567-e89b-12d3-a456-426614174000"
-                        name:
-                          type: string
-                          example: Minha Chave API
-                        partner_id:
-                          type: string
-                          example: "partner_abc123"
-                        user_id:
-                          type: string
-                          nullable: true
-                          example: "user_456def"
-                        created_at:
-                          type: string
-                          format: date-time
-                          example: "2025-07-28T14:32:00Z"
-                        updated_at:
-                          type: string
-                          format: date-time
-                          example: "2025-07-28T14:32:00Z"
-                  meta:
-                    type: object
-                    properties:
-                      current_page:
-                        type: integer
-                        example: 1
-                      last_page:
-                        type: integer
-                        example: 1
-                      per_page:
-                        type: integer
-                        example: 15
-                      total:
-                        type: integer
-                        example: 3
-                      next_page_url:
-                        type: string
-                        nullable: true
-                        example: null
-                      prev_page_url:
-                        type: string
-                        nullable: true
-                        example: null
+                    example: Api Key não encontrada.
         '401':
           description: Não autorizado
           content:
@@ -273,8 +412,139 @@ paths:
                   message:
                     type: string
                     example: Erro interno.
-
-  /keys/{uuid}:
+    put:
+      tags:
+        - Api Keys
+      summary: Atualizar uma API Key existente
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: UUID da API Key a ser atualizada
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Minha Nova Chave API
+                  description: Nome para a API Key
+                active:
+                  type: boolean
+                  example: true
+                  description: Status ativo/inativo da API Key
+                scopes:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                      - read
+                      - write
+                      - delete
+                  description: Escopos permitidos para esta API Key
+                expires_at:
+                  type: string
+                  format: date-time
+                  example: "2025-12-31T23:59:59Z"
+                  description: Data e hora de expiração da API Key (opcional)
+      responses:
+        '200':
+          description: Api Key atualizada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Api Key atualizada com sucesso.
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: "123e4567-e89b-12d3-a456-426614174000"
+                      name:
+                        type: string
+                        example: Minha Nova Chave API
+                      partner_id:
+                        type: string
+                        example: "partner_abc123"
+                      user_id:
+                        type: string
+                        nullable: true
+                        example: "user_456def"
+                      active:
+                        type: boolean
+                        example: true
+                      scopes:
+                        type: array
+                        items:
+                          type: string
+                        example: ["read", "write"]
+                      expires_at:
+                        type: string
+                        format: date-time
+                        example: "2025-12-31T23:59:59Z"
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: "2025-07-28T14:32:00Z"
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: "2025-08-01T10:20:00Z"
+        '400':
+          description: Requisição inválida ou erro na atualização
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Api Key não encontrada ou dados inválidos.
+        '401':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Não autorizado.
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Erro interno.
     delete:
       tags:
         - Api Keys
@@ -632,7 +902,7 @@ paths:
                     example: false
                   message:
                     type: string
-                    example: Nenhuma instância encontrada com o ID fornecido.
+                    example: Nenhuma instância encontrada com o UUID fornecido.
         '401':
           description: Não autorizado
           content:
@@ -705,7 +975,7 @@ paths:
                     example: false
                   message:
                     type: string
-                    example: Nenhuma instância encontrada com o id fornecido.
+                    example: Nenhuma instância encontrada com o UUID fornecido.
         '401':
           description: Não autorizado
           content:
@@ -774,7 +1044,7 @@ paths:
                     example: false
                   message:
                     type: string
-                    example: Nenhuma instância encontrada com o id fornecido.
+                    example: Nenhuma instância encontrada com o UUID fornecido.
         '401':
           description: Não autorizado
           content:
@@ -847,7 +1117,7 @@ paths:
                     example: false
                   message:
                     type: string
-                    example: Nenhuma instância encontrada com o id fornecido.
+                    example: Nenhuma instância encontrada com o UUID fornecido.
         '401':
           description: Não autorizado
           content:

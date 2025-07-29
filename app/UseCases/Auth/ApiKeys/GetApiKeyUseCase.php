@@ -4,14 +4,15 @@ namespace App\UseCases\Auth\ApiKeys;
 
 use App\Repositories\Contracts\Auth\ApiKeyRepositoryInterface;
 use Exception;
+use Illuminate\Database\Eloquent\Model;
 
-class DeleteApiKeyUseCase
+class GetApiKeyUseCase
 {
     public function __construct(
         protected ApiKeyRepositoryInterface $apiKeyRepository
     ) {}
 
-    public function execute(string $uuid, string $partnerId): bool
+    public function execute(string $uuid, string $partnerId): ?Model
     {
         $apiKey = $this->apiKeyRepository->findByUuidAndPartner($uuid, $partnerId);
 
@@ -19,12 +20,6 @@ class DeleteApiKeyUseCase
             throw new Exception('Nenhuma Api Key encontrada com o UUID fornecido.');
         }
 
-        $deleted = $this->apiKeyRepository->deleteByUuidAndPartner($uuid, $partnerId);
-
-        if (!$deleted) {
-            throw new Exception('Falha ao excluir a Api Key.');
-        }
-
-        return true;
+        return $apiKey;
     }
 }

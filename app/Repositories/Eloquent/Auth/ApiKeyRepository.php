@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent\Auth;
 use App\Models\ApiKey;
 use App\Repositories\Contracts\Auth\ApiKeyRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 class ApiKeyRepository implements ApiKeyRepositoryInterface
@@ -49,6 +50,17 @@ class ApiKeyRepository implements ApiKeyRepositoryInterface
     {
         return $this->model->where('id', $uuid)
             ->where('partner_id', $partnerId)
-            ->delete();
+            ->delete() > 0;
+    }
+
+    public function updateByUuidAndPartner(ApiKey $apiKey, array $data): ?ApiKey
+    {
+        $apiKey->fill($data);
+
+        $saved = $apiKey->save();
+
+        if (!$saved) return null;
+
+        return $apiKey;
     }
 }

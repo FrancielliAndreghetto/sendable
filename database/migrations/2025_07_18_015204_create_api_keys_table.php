@@ -16,6 +16,9 @@ return new class extends Migration
 
             $table->string('key', 128)->unique();
             $table->string('name');
+            $table->boolean('active')->default(true);
+            $table->timestamp('expires_at')->nullable();
+            $table->json('scopes')->nullable();
 
             $table->timestamps();
 
