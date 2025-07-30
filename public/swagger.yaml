@@ -17,6 +17,16 @@ components:
 security:
   - bearerAuth: []
 
+tags:
+  - name: Auth
+    description: Endpoints de autenticação
+  - name: Api Keys
+    description: Endpoints para gerenciamento de API Keys
+  - name: Whatsapp - Instâncias
+    description: Gerenciar instâncias do whatsapp
+  - name: Whatsapp - Mensagens
+    description: Enviar/agendar mensagens via whatsapp
+
 paths:
   # ===== AUTH =====
   /auth/login:
@@ -520,11 +530,10 @@ paths:
                     example: Erro interno.
 
   # ===== WHATSAPP =====
-  
   /whatsapp/instances:
     post:
       tags:
-        - Whatsapp
+        - Whatsapp - Instâncias
       summary: Criar uma nova instância WhatsApp
       security:
         - bearerAuth: []
@@ -644,7 +653,7 @@ paths:
                     example: Falha ao criar instância.
     get:
       tags:
-        - Whatsapp
+        - Whatsapp - Instâncias
       summary: Listar instâncias WhatsApp
       security:
         - bearerAuth: []
@@ -766,11 +775,10 @@ paths:
                   message:
                     type: string
                     example: Falha ao listar instâncias.
-
   /whatsapp/instances/{uuid}:
     delete:
       tags:
-        - Whatsapp
+        - Whatsapp - Instâncias
       summary: Deletar uma instância WhatsApp
       security:
         - bearerAuth: []
@@ -835,11 +843,10 @@ paths:
                   message:
                     type: string
                     example: Falha ao deletar a instância.
-
   /whatsapp/instances/connect/{uuid}:
     post:
       tags:
-        - Whatsapp
+        - Whatsapp - Instâncias
       summary: Gerar QRCode para conexão de instância WhatsApp
       security:
         - bearerAuth: []
@@ -908,11 +915,10 @@ paths:
                   message:
                     type: string
                     example: Falha ao conectar da instância.
-
   /whatsapp/instances/disconnect/{uuid}:
     post:
       tags:
-        - Whatsapp
+        - Whatsapp - Instâncias
       summary: Desconectar uma instância WhatsApp
       security:
         - bearerAuth: []
@@ -977,11 +983,10 @@ paths:
                   message:
                     type: string
                     example: Falha ao desconectar da instância.
-
   /whatsapp/instances/reload/{uuid}:
     post:
       tags:
-        - Whatsapp
+        - Whatsapp - Instâncias
       summary: Recarregar (reconectar) instância WhatsApp e gerar QRCode
       security:
         - bearerAuth: []
