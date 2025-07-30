@@ -131,8 +131,6 @@ paths:
       tags:
         - Api Keys
       summary: Criar uma nova API Key
-      security:
-        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -219,13 +217,10 @@ paths:
                   message:
                     type: string
                     example: Falha ao criar Api Key.
-
     get:
       tags:
         - Api Keys
       summary: Listar todas as API Keys
-      security:
-        - bearerAuth: []
       responses:
         '200':
           description: Lista de Api Keys
@@ -327,13 +322,104 @@ paths:
                   message:
                     type: string
                     example: Erro interno.
-
+  /keys/{uuid}:
+    get:
+      tags:
+        - Api Keys
+      summary: Buscar dados da Api Key
+      responses:
+        '200':
+          description: Buscar dados da Api Key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Api Key consultada com sucesso.
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: "123e4567-e89b-12d3-a456-426614174000"
+                      name:
+                        type: string
+                        example: Minha Chave API
+                      partner_id:
+                        type: string
+                        example: "partner_abc123"
+                      user_id:
+                        type: string
+                        nullable: true
+                        example: "user_456def"
+                      scopes:
+                        type: array
+                        items:
+                          type: string
+                        nullable: true
+                        example: ["read", "write"]
+                      expires_at:
+                        type: string
+                        format: date-time
+                        nullable: true
+                        example: "2025-12-31T23:59:59Z"
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: "2025-07-28T14:32:00Z"
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: "2025-07-28T14:32:00Z"
+        '401':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Não autorizado.
+        '404':
+          description: Api Key não encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Api Key não encontrada.
+        '500':
+          description: Erro interno
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Erro interno.
     put:
       tags:
         - Api Keys
       summary: Atualizar uma API Key existente
-      security:
-        - bearerAuth: []
       parameters:
         - in: path
           name: uuid
@@ -465,8 +551,6 @@ paths:
       tags:
         - Api Keys
       summary: Deletar uma API Key
-      security:
-        - bearerAuth: []
       parameters:
         - in: path
           name: uuid
@@ -535,8 +619,6 @@ paths:
       tags:
         - Whatsapp - Instâncias
       summary: Criar uma nova instância WhatsApp
-      security:
-        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -655,8 +737,6 @@ paths:
       tags:
         - Whatsapp - Instâncias
       summary: Listar instâncias WhatsApp
-      security:
-        - bearerAuth: []
       responses:
         '200':
           description: Lista paginada de instâncias
@@ -780,8 +860,6 @@ paths:
       tags:
         - Whatsapp - Instâncias
       summary: Deletar uma instância WhatsApp
-      security:
-        - bearerAuth: []
       parameters:
         - in: path
           name: uuid
@@ -848,8 +926,6 @@ paths:
       tags:
         - Whatsapp - Instâncias
       summary: Gerar QRCode para conexão de instância WhatsApp
-      security:
-        - bearerAuth: []
       parameters:
         - in: path
           name: uuid
@@ -920,8 +996,6 @@ paths:
       tags:
         - Whatsapp - Instâncias
       summary: Desconectar uma instância WhatsApp
-      security:
-        - bearerAuth: []
       parameters:
         - in: path
           name: uuid
@@ -988,8 +1062,6 @@ paths:
       tags:
         - Whatsapp - Instâncias
       summary: Recarregar (reconectar) instância WhatsApp e gerar QRCode
-      security:
-        - bearerAuth: []
       parameters:
         - in: path
           name: uuid

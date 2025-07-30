@@ -37,8 +37,8 @@ Route::prefix('whatsapp')->middleware([AuthSanctumOrApiKey::class])->group(funct
 
 Route::prefix('keys')->middleware([AuthSanctumOrApiKey::class])->group(function () {
     Route::get('', ListApiKeysController::class);
-    Route::get('/{uuid}', GetApiKeyController::class);
     Route::post('', CreateApiKeyController::class);
+    Route::get('/{uuid}', GetApiKeyController::class);
     Route::delete('/{uuid}', DeleteApiKeyController::class);
     Route::put('/{uuid}', UpdateApiKeyController::class);
 });
