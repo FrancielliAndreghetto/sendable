@@ -4,26 +4,27 @@ namespace App\DTOs\Auth\ApiKeys;
 
 class UpdateApiKeyDTO
 {
-    public ?string $name;
-    public ?bool $active;
-    public ?array $scopes;
-    public ?string $expires_at;
+    public ?string $name = null;
+    public ?bool $active = null;
+    public ?array $scopes = null;
+    public ?string $expires_at = null;
+
+    protected array $filled = [];
 
     public function __construct(array $data)
     {
-        $this->name = $data['name'] ?? null;
-        $this->active = $data['active'] ?? null;
-        $this->scopes = $data['scopes'] ?? null;
-        $this->expires_at = $data['expires_at'] ?? null;
+        foreach (['name', 'active', 'scopes', 'expires_at'] as $field) {
+            if (array_key_exists($field, $data)) {
+                $this->filled[] = $field;
+                $this->$field = $data[$field];
+            }
+        }
     }
 
     public function toArray(): array
     {
-        return array_filter([
-            'name' => $this->name,
-            'active' => $this->active,
-            'scopes' => $this->scopes,
-            'expires_at' => $this->expires_at,
-        ], fn($value) => !is_null($value));
+        return collect($this->filled)
+            ->mapWithKeys(fn($field) => [$field => $this->$field])
+            ->all();
     }
 }
