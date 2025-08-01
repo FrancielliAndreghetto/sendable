@@ -88,6 +88,9 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
             'Symfony\\Component\\CssSelector\\' => 30,
             'Symfony\\Component\\Console\\' => 26,
             'Symfony\\Component\\Clock\\' => 24,
+            'Spatie\\LaravelPackageTools\\' => 27,
+            'Scalar\\Database\\Factories\\' => 26,
+            'Scalar\\' => 7,
         ),
         'R' => 
         array (
@@ -315,6 +318,18 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         'Symfony\\Component\\Clock\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/clock',
+        ),
+        'Spatie\\LaravelPackageTools\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/spatie/laravel-package-tools/src',
+        ),
+        'Scalar\\Database\\Factories\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/scalar/laravel/database/factories',
+        ),
+        'Scalar\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/scalar/laravel/src',
         ),
         'Ramsey\\Uuid\\' => 
         array (
@@ -5467,6 +5482,10 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         'Ramsey\\Uuid\\Validator\\GenericValidator' => __DIR__ . '/..' . '/ramsey/uuid/src/Validator/GenericValidator.php',
         'Ramsey\\Uuid\\Validator\\ValidatorInterface' => __DIR__ . '/..' . '/ramsey/uuid/src/Validator/ValidatorInterface.php',
         'SQLite3Exception' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/SQLite3Exception.php',
+        'Scalar\\Controllers\\ScalarController' => __DIR__ . '/..' . '/scalar/laravel/src/Controllers/ScalarController.php',
+        'Scalar\\Facades\\Scalar' => __DIR__ . '/..' . '/scalar/laravel/src/Facades/Scalar.php',
+        'Scalar\\Scalar' => __DIR__ . '/..' . '/scalar/laravel/src/Scalar.php',
+        'Scalar\\ScalarServiceProvider' => __DIR__ . '/..' . '/scalar/laravel/src/ScalarServiceProvider.php',
         'SebastianBergmann\\CliParser\\AmbiguousOptionException' => __DIR__ . '/..' . '/sebastian/cli-parser/src/exceptions/AmbiguousOptionException.php',
         'SebastianBergmann\\CliParser\\Exception' => __DIR__ . '/..' . '/sebastian/cli-parser/src/exceptions/Exception.php',
         'SebastianBergmann\\CliParser\\OptionDoesNotAllowArgumentException' => __DIR__ . '/..' . '/sebastian/cli-parser/src/exceptions/OptionDoesNotAllowArgumentException.php',
@@ -5672,6 +5691,40 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         'SebastianBergmann\\Type\\UnknownType' => __DIR__ . '/..' . '/sebastian/type/src/type/UnknownType.php',
         'SebastianBergmann\\Type\\VoidType' => __DIR__ . '/..' . '/sebastian/type/src/type/VoidType.php',
         'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
+        'Spatie\\LaravelPackageTools\\Commands\\Concerns\\AskToRunMigrations' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Commands/Concerns/AskToRunMigrations.php',
+        'Spatie\\LaravelPackageTools\\Commands\\Concerns\\AskToStarRepoOnGitHub' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Commands/Concerns/AskToStarRepoOnGitHub.php',
+        'Spatie\\LaravelPackageTools\\Commands\\Concerns\\PublishesResources' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Commands/Concerns/PublishesResources.php',
+        'Spatie\\LaravelPackageTools\\Commands\\Concerns\\SupportsServiceProviderInApp' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Commands/Concerns/SupportsServiceProviderInApp.php',
+        'Spatie\\LaravelPackageTools\\Commands\\Concerns\\SupportsStartWithEndWith' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Commands/Concerns/SupportsStartWithEndWith.php',
+        'Spatie\\LaravelPackageTools\\Commands\\InstallCommand' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Commands/InstallCommand.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\PackageServiceProvider\\ProcessAssets' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/PackageServiceProvider/ProcessAssets.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\PackageServiceProvider\\ProcessBladeComponents' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/PackageServiceProvider/ProcessBladeComponents.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\PackageServiceProvider\\ProcessCommands' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/PackageServiceProvider/ProcessCommands.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\PackageServiceProvider\\ProcessConfigs' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/PackageServiceProvider/ProcessConfigs.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\PackageServiceProvider\\ProcessInertia' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/PackageServiceProvider/ProcessInertia.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\PackageServiceProvider\\ProcessMigrations' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/PackageServiceProvider/ProcessMigrations.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\PackageServiceProvider\\ProcessRoutes' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/PackageServiceProvider/ProcessRoutes.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\PackageServiceProvider\\ProcessServiceProviders' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/PackageServiceProvider/ProcessServiceProviders.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\PackageServiceProvider\\ProcessTranslations' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/PackageServiceProvider/ProcessTranslations.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\PackageServiceProvider\\ProcessViewComposers' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/PackageServiceProvider/ProcessViewComposers.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\PackageServiceProvider\\ProcessViewSharedData' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/PackageServiceProvider/ProcessViewSharedData.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\PackageServiceProvider\\ProcessViews' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/PackageServiceProvider/ProcessViews.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\Package\\HasAssets' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/Package/HasAssets.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\Package\\HasBladeComponents' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/Package/HasBladeComponents.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\Package\\HasCommands' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/Package/HasCommands.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\Package\\HasConfigs' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/Package/HasConfigs.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\Package\\HasInertia' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/Package/HasInertia.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\Package\\HasInstallCommand' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/Package/HasInstallCommand.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\Package\\HasMigrations' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/Package/HasMigrations.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\Package\\HasRoutes' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/Package/HasRoutes.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\Package\\HasServiceProviders' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/Package/HasServiceProviders.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\Package\\HasTranslations' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/Package/HasTranslations.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\Package\\HasViewComposers' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/Package/HasViewComposers.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\Package\\HasViewSharedData' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/Package/HasViewSharedData.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\Package\\HasViews' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/Package/HasViews.php',
+        'Spatie\\LaravelPackageTools\\Exceptions\\InvalidPackage' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Exceptions/InvalidPackage.php',
+        'Spatie\\LaravelPackageTools\\Package' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Package.php',
+        'Spatie\\LaravelPackageTools\\PackageServiceProvider' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/PackageServiceProvider.php',
         'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
         'Symfony\\Component\\Clock\\Clock' => __DIR__ . '/..' . '/symfony/clock/Clock.php',
         'Symfony\\Component\\Clock\\ClockAwareTrait' => __DIR__ . '/..' . '/symfony/clock/ClockAwareTrait.php',
