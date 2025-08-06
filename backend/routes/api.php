@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\Whatsapp\Instances\DeleteWhatsappInstanceController
 use App\Http\Controllers\Api\Whatsapp\Instances\DisconnectWhatsappInstanceController;
 use App\Http\Controllers\Api\Whatsapp\Instances\ListWhatsappInstancesController;
 use App\Http\Controllers\Api\Whatsapp\Instances\ReloadWhatsappInstanceController;
+use App\Http\Controllers\Api\Whatsapp\Instances\SyncWhatsappInstanceContactsController;
 use App\Http\Controllers\Api\Whatsapp\Messages\SendWhatsappMessageController;
 use App\Http\Middleware\AuthSanctumOrApiKey;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,7 @@ Route::prefix('whatsapp')->middleware([AuthSanctumOrApiKey::class])->name('whats
         Route::post('/connect/{uuid}', ConnectWhatsappInstanceController::class)->name('connect');
         Route::delete('/disconnect/{uuid}', DisconnectWhatsappInstanceController::class)->name('disconnect');
         Route::post('/reload/{uuid}', ReloadWhatsappInstanceController::class)->name('reload');
+        Route::post('/syncContacts/{uuid}', SyncWhatsappInstanceContactsController::class)->name('syncContacts');
     });
 
     Route::post('/messages/send', SendWhatsappMessageController::class)->name('messages.send');

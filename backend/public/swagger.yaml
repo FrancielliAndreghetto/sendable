@@ -1242,7 +1242,7 @@ paths:
                     example: true
                   message:
                     type: string
-                    example: ontatos consultados com sucesso.
+                    example: Contatos consultados com sucesso.
                   data:
                     type: array
                     items:

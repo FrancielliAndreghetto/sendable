@@ -12,4 +12,5 @@ interface WhatsappInstanceServiceInterface
     public function connectInstance(string $name): array;
     public function disconnectInstance(string $name): array;
     public function reloadInstance(string $name): array;
+    public function getContacts(string $name): array;
 }

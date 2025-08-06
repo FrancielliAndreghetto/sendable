@@ -44,4 +44,9 @@ class WhatsappInstanceService extends AbstractWhatsappService implements Whatsap
     {
         return $this->request('POST', "/instance/restart/{$name}");
     }
+
+    public function getContacts(string $name): array
+    {
+        return $this->request('POST', "/chat/findContacts/{$name}");
+    }
 }

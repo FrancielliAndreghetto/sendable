@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Jobs;
+
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -10,15 +12,21 @@ class SyncWhatsappContactsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public function __construct(public string $instanceId, public int $batchSize = 50) {}
+    public function __construct(
+        public array $contacts,
+        public string $instanceId,
+        public string $partnerId,
+        public int $batchSize = 50
+    ) {}
 
     public function handle()
     {
-        $contacts = app(EvolutionApiService::class)->getContacts($this->instanceId);
-
-        // Chunka os contatos
-        foreach (array_chunk($contacts, $this->batchSize) as $chunk) {
-            ImportWhatsappContactsChunkJob::dispatch($chunk, $this->instanceId);
+        foreach (array_chunk($this->contacts, $this->batchSize) as $chunk) {
+            ImportWhatsappContactsChunkJob::dispatch(
+                $chunk,
+                $this->instanceId,
+                $this->partnerId
+            );
         }
     }
 }

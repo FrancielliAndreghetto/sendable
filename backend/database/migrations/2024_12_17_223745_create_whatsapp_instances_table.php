@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('custom_code')->nullable()->index();
 
             $table->string('external_id')->nullable()->index();
-            $table->string('external_name');
+            $table->string('external_name')->nullable();
 
             $table->string('name');
             $table->string('number')->nullable();
