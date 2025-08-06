@@ -5,36 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
-class WhatsappMessage extends Model
+class WhatsappContact extends Model
 {
     use HasUuids;
 
-    protected $table = 'whatsapp_messages';
+    protected $table = 'whatsapp_contacts';
     protected $keyType = 'string';
     public $incrementing = false;
 
     protected $fillable = [
+        'id',
         'partner_id',
         'instance_id',
-        'contact_id',
+        'remote_id',
         'name',
         'number',
-        'message',
-        'scheduled_date',
-        'status_id',
-        'custom_code',
-        'sent_at',
-        'error_message',
-        'delivery_status'
+        'image',
     ];
 
     public function instance()
     {
         return $this->belongsTo(WhatsappInstance::class, 'instance_id');
-    }
-
-    public function contact()
-    {
-        return $this->belongsTo(WhatsappContact::class, 'contact_id');
     }
 }

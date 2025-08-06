@@ -1,35 +1,30 @@
 <?php
 
-namespace App\Repositories\Eloquent\Auth;
+namespace App\Repositories\Eloquent\Whatsapp\Contacts;
 
-use App\Models\ApiKey;
-use App\Repositories\Contracts\Auth\ApiKeyRepositoryInterface;
+use App\Models\WhatsappContact;
+use App\Repositories\Contracts\Whatsapp\Contacts\WhatsappContactRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-class ApiKeyRepository implements ApiKeyRepositoryInterface
+class WhatsappContactRepository implements WhatsappContactRepositoryInterface
 {
-    protected ApiKey $model;
+    protected WhatsappContact $model;
 
-    public function __construct(ApiKey $model)
+    public function __construct(WhatsappContact $model)
     {
         $this->model = $model;
     }
 
-    public function create(array $data): ApiKey
+    public function create(array $data): WhatsappContact
     {
         return $this->model->create($data);
     }
 
-    public function findByUuidAndPartner(string $uuid, string $partnerId): ?ApiKey
+    public function findByUuidAndPartner(string $uuid, string $partnerId): ?WhatsappContact
     {
         return $this->model->where('id', $uuid)
             ->where('partner_id', $partnerId)
             ->first();
-    }
-
-    public function findByKey(string $key): ?ApiKey
-    {
-        return $this->model->where('key', $key)->first();
     }
 
     public function paginateByPartner(string $partnerId, int $perPage = 15, int $page = 1): LengthAwarePaginator
@@ -43,17 +38,17 @@ class ApiKeyRepository implements ApiKeyRepositoryInterface
     {
         return $this->model->where('id', $uuid)
             ->where('partner_id', $partnerId)
-            ->delete() > 0;
+            ->delete();
     }
 
-    public function updateByUuidAndPartner(ApiKey $apiKey, array $data): ?ApiKey
+    public function updateByUuidAndPartner(WhatsappContact $whatsappContact, array $data): ?WhatsappContact
     {
-        $apiKey->fill($data);
+        $whatsappContact->fill($data);
 
-        $saved = $apiKey->save();
+        $saved = $whatsappContact->save();
 
         if (!$saved) return null;
 
-        return $apiKey;
+        return $whatsappContact;
     }
 }

@@ -6,8 +6,11 @@ use App\Http\Controllers\Api\Auth\ApiKeys\GetApiKeyController;
 use App\Http\Controllers\Api\Auth\ApiKeys\ListApiKeysController;
 use App\Http\Controllers\Api\Auth\ApiKeys\UpdateApiKeyController;
 use App\Http\Controllers\Api\Auth\Authenticate\AuthenticateUserController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\Whatsapp\Contacts\CreateWhatsappContactController;
+use App\Http\Controllers\Api\Whatsapp\Contacts\DeleteWhatsappContactController;
+use App\Http\Controllers\Api\Whatsapp\Contacts\GetWhatsappContactController;
+use App\Http\Controllers\Api\Whatsapp\Contacts\ListWhatsappContactsController;
+use App\Http\Controllers\Api\Whatsapp\Contacts\UpdateWhatsappContactController;
 use App\Http\Controllers\Api\Whatsapp\Instances\ConnectWhatsappInstanceController;
 use App\Http\Controllers\Api\Whatsapp\Instances\CreateWhatsappInstanceController;
 use App\Http\Controllers\Api\Whatsapp\Instances\DeleteWhatsappInstanceController;
@@ -16,29 +19,36 @@ use App\Http\Controllers\Api\Whatsapp\Instances\ListWhatsappInstancesController;
 use App\Http\Controllers\Api\Whatsapp\Instances\ReloadWhatsappInstanceController;
 use App\Http\Controllers\Api\Whatsapp\Messages\SendWhatsappMessageController;
 use App\Http\Middleware\AuthSanctumOrApiKey;
+use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::post('/auth/login', AuthenticateUserController::class)->name('auth.login');
 
-Route::post('/auth/login', AuthenticateUserController::class);
+Route::prefix('whatsapp')->middleware([AuthSanctumOrApiKey::class])->name('whatsapp.')->group(function () {
+    Route::prefix('instances')->name('instances.')->group(function () {
+        Route::get('', ListWhatsappInstancesController::class)->name('index');
+        Route::post('', CreateWhatsappInstanceController::class)->name('store');
+        Route::delete('/{uuid}', DeleteWhatsappInstanceController::class)->name('destroy');
 
-Route::prefix('whatsapp')->middleware([AuthSanctumOrApiKey::class])->group(function () {
-    Route::get('/instances', ListWhatsappInstancesController::class);
-    Route::post('/instances', CreateWhatsappInstanceController::class);
-    Route::delete('/instances/{uuid}', DeleteWhatsappInstanceController::class);
+        Route::post('/connect/{uuid}', ConnectWhatsappInstanceController::class)->name('connect');
+        Route::delete('/disconnect/{uuid}', DisconnectWhatsappInstanceController::class)->name('disconnect');
+        Route::post('/reload/{uuid}', ReloadWhatsappInstanceController::class)->name('reload');
+    });
 
-    Route::post('/instances/connect/{uuid}', ConnectWhatsappInstanceController::class);
-    Route::delete('/instances/disconnect/{uuid}', DisconnectWhatsappInstanceController::class);
-    Route::post('/instances/reload/{uuid}', ReloadWhatsappInstanceController::class);
+    Route::post('/messages/send', SendWhatsappMessageController::class)->name('messages.send');
 
-    Route::post('/messages/send', SendWhatsappMessageController::class);
+    Route::prefix('contacts')->name('contacts.')->group(function () {
+        Route::get('', ListWhatsappContactsController::class)->name('index');
+        Route::post('', CreateWhatsappContactController::class)->name('store');
+        Route::get('/{uuid}', GetWhatsappContactController::class)->name('show');
+        Route::put('/{uuid}', UpdateWhatsappContactController::class)->name('update');
+        Route::delete('/{uuid}', DeleteWhatsappContactController::class)->name('destroy');
+    });
 });
 
-Route::prefix('keys')->middleware([AuthSanctumOrApiKey::class])->group(function () {
-    Route::get('', ListApiKeysController::class);
-    Route::post('', CreateApiKeyController::class);
-    Route::get('/{uuid}', GetApiKeyController::class);
-    Route::delete('/{uuid}', DeleteApiKeyController::class);
-    Route::put('/{uuid}', UpdateApiKeyController::class);
+Route::prefix('keys')->middleware([AuthSanctumOrApiKey::class])->name('keys.')->group(function () {
+    Route::get('', ListApiKeysController::class)->name('index');
+    Route::post('', CreateApiKeyController::class)->name('store');
+    Route::get('/{uuid}', GetApiKeyController::class)->name('show');
+    Route::put('/{uuid}', UpdateApiKeyController::class)->name('update');
+    Route::delete('/{uuid}', DeleteApiKeyController::class)->name('destroy');
 });

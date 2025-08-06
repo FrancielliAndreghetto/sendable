@@ -20,7 +20,7 @@ class WhatsappInstance extends Model
         'custom_code',
         'external_name',
         'name',
-        'whatsapp_number',
+        'number',
         'token',
         'is_active',
         'connected_at',

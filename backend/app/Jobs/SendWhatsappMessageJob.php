@@ -17,7 +17,7 @@ class SendWhatsappMessageJob implements ShouldQueue
     public function handle(): void
     {
         // Simula envio via API externa
-        logger("Enviando mensagem para {$this->message->whatsapp_number}");
+        logger("Enviando mensagem para {$this->message->number}");
 
         // Atualiza status como enviado
         $this->message->update([

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('external_name');
 
             $table->string('name');
-            $table->string('whatsapp_number')->nullable();
+            $table->string('number')->nullable();
 
             $table->string('token')->nullable();
             $table->boolean('is_active')->default(true);
@@ -29,6 +29,8 @@ return new class extends Migration
             $table->timestamps();
 
             $table->unique(['partner_id', 'external_id']);
+
+            $table->foreign('partner_id')->references('id')->on('partners')->onDelete('cascade');
         });
     }
 

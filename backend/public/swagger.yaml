@@ -24,6 +24,8 @@ tags:
     description: Endpoints para gerenciamento de API Keys
   - name: Whatsapp - Instâncias
     description: Gerenciar instâncias do whatsapp
+  - name: Whatsapp - Contatos
+    description: Gerenciar contatos do whatsapp
   - name: Whatsapp - Mensagens
     description: Enviar/agendar mensagens via whatsapp
 
@@ -180,7 +182,7 @@ paths:
                         example: Minha Chave API
                       partner_id:
                         type: string
-                        example: "partner_abc123"
+                        example: "01986209-ae94-7192-9aa4-0497be95ab14"
                       user_id:
                         type: string
                         nullable: true
@@ -249,7 +251,7 @@ paths:
                           example: Minha Chave API
                         partner_id:
                           type: string
-                          example: "partner_abc123"
+                          example: "01986209-ae94-7192-9aa4-0497be95ab14"
                         user_id:
                           type: string
                           nullable: true
@@ -353,7 +355,7 @@ paths:
                         example: Minha Chave API
                       partner_id:
                         type: string
-                        example: "partner_abc123"
+                        example: "01986209-ae94-7192-9aa4-0497be95ab14"
                       user_id:
                         type: string
                         nullable: true
@@ -391,7 +393,7 @@ paths:
                     type: string
                     example: Não autorizado.
         '404':
-          description: Api Key não encontrada
+          description: Api Key não foi encontrada
           content:
             application/json:
               schema:
@@ -402,7 +404,7 @@ paths:
                     example: false
                   message:
                     type: string
-                    example: Api Key não encontrada.
+                    example: Api Key não foi encontrada.
         '500':
           description: Erro interno
           content:
@@ -419,7 +421,7 @@ paths:
     put:
       tags:
         - Api Keys
-      summary: Atualizar uma API Key existente
+      summary: Atualizar uma API Key
       parameters:
         - in: path
           name: uuid
@@ -483,7 +485,7 @@ paths:
                         example: Minha Nova Chave API
                       partner_id:
                         type: string
-                        example: "partner_abc123"
+                        example: "01986209-ae94-7192-9aa4-0497be95ab14"
                       user_id:
                         type: string
                         nullable: true
@@ -520,7 +522,7 @@ paths:
                     example: false
                   message:
                     type: string
-                    example: Api Key não encontrada ou dados inválidos.
+                    example: Api Key não foi encontrada ou dados inválidos.
         '401':
           description: Não autorizado
           content:
@@ -574,7 +576,7 @@ paths:
                     type: string
                     example: Api Key deletada com sucesso.
         '404':
-          description: Api Key não encontrada
+          description: Api Key não foi encontrada
           content:
             application/json:
               schema:
@@ -585,7 +587,7 @@ paths:
                     example: false
                   message:
                     type: string
-                    example: Api Key não encontrada.
+                    example: Api Key não foi encontrada.
         '401':
           description: Não autorizado
           content:
@@ -1127,3 +1129,476 @@ paths:
                   message:
                     type: string
                     example: Falha ao recarregar a instância.
+
+  # ===== WHATSAPP CONTACTS =====
+  /whatsapp/contacts:
+    post:
+      tags:
+        - Whatsapp - Contatos
+      summary: Criar um novo contato
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                instance_id:
+                  type: string
+                  nullable: true
+                  example: "123e4567-e89b-12d3-a456-426614174000"
+                  description: UUID da instância caso associado
+                name:
+                  type: string
+                  example: Contato teste
+                number:
+                  type: string
+                  example: "5511999999999"
+                  description: Número formatado com código de país (somente dígitos)
+                image:
+                  type: string
+                  nullable: true
+                  description: Pode ser uma URL da imagem ou uma string em base64
+                  examples:
+                    url:
+                      summary: URL da imagem
+                      value: "https://cdn.example.com/image.jpg"
+                    base64:
+                      summary: Imagem em base64
+                      value: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
+      responses:
+        '201':
+          description: Contato criado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Contato criado com sucesso.
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: "123e4567-e89b-12d3-a456-426614174000"
+                      partner_id:
+                        type: string
+                        example: "01986209-ae94-7192-9aa4-0497be95ab14"
+                      instance_id:
+                        type: string
+                        example: "69978009-ae94-7192-9aa4-04974e95ab14"
+                      name:
+                        type: string
+                        example: Contato Teste
+                      number:
+                        type: string
+                        example: "5511999999999"
+                      image:
+                        type: string
+                        example: "https://cdn.example.com/image.jpg"
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: "2025-07-28T14:32:00Z"
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: "2025-07-28T14:32:00Z"
+        '500':
+          description: Falha ao criar Contato
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Falha ao criar Contato.
+    get:
+      tags:
+        - Whatsapp - Contatos
+      summary: Listar todas os Contatos
+      responses:
+        '200':
+          description: Lista de ontatos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: ontatos consultados com sucesso.
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          example: "123e4567-e89b-12d3-a456-426614174000"
+                        partner_id:
+                          type: string
+                          example: "01986209-ae94-7192-9aa4-0497be95ab14"
+                        instance_id:
+                          type: string
+                          example: "69978009-ae94-7192-9aa4-04974e95ab14"
+                        name:
+                          type: string
+                          example: Contato Teste
+                        number:
+                          type: string
+                          example: "5511999999999"
+                        image:
+                          type: string
+                          example: "https://cdn.example.com/image.jpg"
+                        created_at:
+                          type: string
+                          format: date-time
+                          example: "2025-07-28T14:32:00Z"
+                        updated_at:
+                          type: string
+                          format: date-time
+                          example: "2025-07-28T14:32:00Z"
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                        example: 1
+                      last_page:
+                        type: integer
+                        example: 1
+                      per_page:
+                        type: integer
+                        example: 15
+                      total:
+                        type: integer
+                        example: 3
+                      next_page_url:
+                        type: string
+                        nullable: true
+                        example: null
+                      prev_page_url:
+                        type: string
+                        nullable: true
+                        example: null
+        '401':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Não autorizado.
+        '500':
+          description: Erro interno
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Erro interno.
+  /whatsapp/contacts/{uuid}:
+    get:
+      tags:
+        - Whatsapp - Contatos
+      summary: Buscar dados do Contato
+      responses:
+        '200':
+          description: Buscar dados do Contato
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Contato consultado com sucesso.
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: "123e4567-e89b-12d3-a456-426614174000"
+                      partner_id:
+                        type: string
+                        example: "01986209-ae94-7192-9aa4-0497be95ab14"
+                      instance_id:
+                        type: string
+                        example: "69978009-ae94-7192-9aa4-04974e95ab14"
+                      name:
+                        type: string
+                        example: Contato Teste
+                      number:
+                        type: string
+                        example: "5511999999999"
+                      image:
+                        type: string
+                        example: "https://cdn.example.com/image.jpg"
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: "2025-07-28T14:32:00Z"
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: "2025-07-28T14:32:00Z"
+        '401':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Não autorizado.
+        '404':
+          description: Contato não foi encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Contato não foi encontrado.
+        '500':
+          description: Erro interno
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Erro interno.
+    put:
+      tags:
+        - Whatsapp - Contatos
+      summary: Atualizar um Contato
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: UUID do Contato a ser atualizado
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                instance_id:
+                  type: string
+                  nullable: true
+                  example: "123e4567-e89b-12d3-a456-426614174000"
+                  description: Nova instancia associada
+                name:
+                  type: string
+                  example: Novo Contato teste
+                number:
+                  type: string
+                  example: "5511999999999"
+                  description: Número alterado do contato
+                image:
+                  type: string
+                  nullable: true
+                  description: Nova URL da imagem ou uma string em base64
+                  examples:
+                    url:
+                      summary: URL da imagem
+                      value: "https://cdn.example.com/image.jpg"
+                    base64:
+                      summary: Imagem em base64
+                      value: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
+      responses:
+        '200':
+          description: Contato atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Contato atualizado com sucesso.
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: "123e4567-e89b-12d3-a456-426614174000"
+                      partner_id:
+                        type: string
+                        example: "01986209-ae94-7192-9aa4-0497be95ab14"
+                      instance_id:
+                        type: string
+                        example: "69978009-ae94-7192-9aa4-04974e95ab14"
+                      name:
+                        type: string
+                        example: Contato Teste
+                      number:
+                        type: string
+                        example: "5511999999999"
+                      image:
+                        type: string
+                        example: "https://cdn.example.com/image.jpg"
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: "2025-07-28T14:32:00Z"
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: "2025-07-28T14:32:00Z"
+        '400':
+          description: Requisição inválida ou erro na atualização
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Contato não foi encontrado ou dados inválidos.
+        '401':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Não autorizado.
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Erro interno.
+    delete:
+      tags:
+        - Whatsapp - Contatos
+      summary: Deletar um Contato
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: UUID do Contato a ser deletado
+      responses:
+        '200':
+          description: Contato deletado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Contato deletado com sucesso.
+        '404':
+          description: Contato não foi encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Contato não foi encontrado.
+        '401':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Não autorizado.
+        '500':
+          description: Erro interno
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Erro interno.

@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent\Whatsapp\Instances;
 use App\Models\WhatsappInstance;
 use App\Repositories\Contracts\Whatsapp\Instances\WhatsappInstanceRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class WhatsappInstanceRepository implements WhatsappInstanceRepositoryInterface
 {
@@ -25,6 +26,11 @@ class WhatsappInstanceRepository implements WhatsappInstanceRepositoryInterface
         return $this->model->where('id', $uuid)
             ->where('partner_id', $partnerId)
             ->first();
+    }
+
+    public function findAllByPartner(string $partnerId): Collection
+    {
+        return $this->model->where('partner_id', $partnerId)->get();
     }
 
     public function findByNumberAndPartner(string $number, string $partnerId): ?WhatsappInstance
