@@ -9,7 +9,7 @@ import useMailSetter from "@/hooks/store/auth/useMailSetter";
 interface ForgotPasswordData {
   email: string;
 }
-
+  
 const useForgotPasswordUser = () => {
   // for state mangemnet
   const { setEmail } = useMailSetter();
