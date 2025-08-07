@@ -12,21 +12,24 @@ class SyncWhatsappContactsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public function __construct(
-        public array $contacts,
-        public string $instanceId,
-        public string $partnerId,
-        public int $batchSize = 50
-    ) {}
+    protected array $contacts;
+    protected string $instanceId;
+    protected string $partnerId;
+    protected int $batchSize;
 
-    public function handle()
+    public function __construct(array $contacts, string $instanceId, string $partnerId, int $batchSize = 50)
+    {
+        $this->contacts = $contacts;
+        $this->instanceId = $instanceId;
+        $this->partnerId = $partnerId;
+        $this->batchSize = $batchSize;
+    }
+
+    public function handle(): void
     {
         foreach (array_chunk($this->contacts, $this->batchSize) as $chunk) {
-            ImportWhatsappContactsChunkJob::dispatch(
-                $chunk,
-                $this->instanceId,
-                $this->partnerId
-            );
+            ImportWhatsappContactsChunkJob::dispatch($chunk, $this->instanceId, $this->partnerId)
+                ->onQueue('whatsapp_contacts');
         }
     }
 }

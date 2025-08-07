@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Jobs;
 
 use App\Repositories\Contracts\Whatsapp\Contacts\WhatsappContactRepositoryInterface;
@@ -14,29 +15,44 @@ class ImportWhatsappContactsChunkJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public function __construct(
-        public array $contacts,
-        public string $instanceId,
-        public string $partnerId,
-        protected WhatsappContactRepositoryInterface $whatsappContactRepository
-    ) {}
+    protected array $contacts;
+    protected string $instanceId;
+    protected string $partnerId;
 
-    public function handle()
+    public function __construct(
+        array $contacts,
+        string $instanceId,
+        string $partnerId,
+        protected WhatsappContactRepositoryInterface $whatsappContactRepository
+    ) {
+        $this->contacts = $contacts;
+        $this->instanceId = $instanceId;
+        $this->partnerId = $partnerId;
+    }
+
+    public function handle(): void
     {
         foreach ($this->contacts as $contactData) {
+            if (empty($contactData['remoteJid'])) {
+                continue;
+            }
+
+            $number = explode('@', $contactData['remoteJid'])[0];
+            $name = $contactData['pushName'] ?? null;
+            $image = $contactData['profilePicUrl'] ?? null;
+
             $whatsappContact = $this->whatsappContactRepository->create([
                 'partner_id' => $this->partnerId,
                 'instance_id' => $this->instanceId,
-                'name' => $contactData['pushName'],
-                'number' => explode('@', $contactData['remoteJid'])[0],
-                'image' => $contactData['profilePicUrl'],
+                'name' => $name,
+                'number' => $number,
+                'image' => $image,
             ]);
 
-            if (!$whatsappContact || !$whatsappContact->exists) {
-                throw new Exception('Falha ao salvar Contato no banco de dados');
+            if (!$whatsappContact) {
+                logger()->error('Falha ao salvar Contato no banco de dados.');
+                throw new Exception('Falha ao salvar Contato no banco de dados.');
             }
-
-            return $whatsappContact;
         }
     }
 }

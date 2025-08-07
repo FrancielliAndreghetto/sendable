@@ -16,7 +16,7 @@ class SyncWhatsappInstanceContactsUseCase
         protected WhatsappContactRepositoryInterface $whatsappContactRepository
     ) {}
 
-    public function execute(string $uuid, string $partnerId)
+    public function execute(string $uuid, string $partnerId): void
     {
         $instance = $this->whatsappInstanceRepository->findByUuidAndPartner($uuid, $partnerId);
 
@@ -24,8 +24,13 @@ class SyncWhatsappInstanceContactsUseCase
             throw new Exception("Nenhuma instância encontrada com o UUID fornecido.");
         }
 
-        $response = $this->whatsappInstanceService->getContacts($instance->external_name);
+        $contacts = $this->whatsappInstanceService->getContacts($instance->external_name);
 
-        SyncWhatsappContactsJob::dispatch($response, $uuid, $partnerId);
+        if (empty($contacts) || !is_array($contacts)) {
+            return;
+        }
+
+        SyncWhatsappContactsJob::dispatch($contacts, $uuid, $partnerId)
+            ->onQueue('whatsapp_contacts');
     }
 }

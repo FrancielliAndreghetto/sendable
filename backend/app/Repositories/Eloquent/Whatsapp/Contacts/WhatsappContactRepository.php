@@ -20,6 +20,11 @@ class WhatsappContactRepository implements WhatsappContactRepositoryInterface
         return $this->model->create($data);
     }
 
+    public function createOrUpdate(array $data): WhatsappContact
+    {
+        return $this->model->createOrUpdate($data);
+    }
+
     public function findByUuidAndPartner(string $uuid, string $partnerId): ?WhatsappContact
     {
         return $this->model->where('id', $uuid)

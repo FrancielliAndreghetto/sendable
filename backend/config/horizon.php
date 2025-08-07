@@ -56,7 +56,7 @@ return [
 
     'prefix' => env(
         'HORIZON_PREFIX',
-        Str::slug(env('APP_NAME', 'laravel'), '_').'_horizon:'
+        Str::slug(env('APP_NAME', 'laravel'), '_') . '_horizon:'
     ),
 
     /*
@@ -202,11 +202,42 @@ return [
                 'balanceMaxShift' => 1,
                 'balanceCooldown' => 3,
             ],
+
+            'supervisor-whatsapp-contacts' => [
+                'connection' => 'redis',
+                'queue' => ['whatsapp_contacts'],
+                'balance' => 'simple',
+                'processes' => 5,
+                'tries' => 3,
+            ],
+
+            'supervisor-whatsapp-messages' => [
+                'connection' => 'redis',
+                'queue' => ['whatsapp_messages'],
+                'balance' => 'simple',
+                'processes' => 5,
+                'tries' => 3,
+            ],
         ],
 
         'local' => [
             'supervisor-1' => [
                 'maxProcesses' => 3,
+            ],
+            'supervisor-whatsapp-contacts' => [
+                'connection' => 'redis',
+                'queue' => ['whatsapp_contacts'],
+                'balance' => 'auto',
+                'processes' => 1,
+                'tries' => 3,
+            ],
+
+            'supervisor-whatsapp-messages' => [
+                'connection' => 'redis',
+                'queue' => ['whatsapp_messages'],
+                'balance' => 'auto',
+                'processes' => 1,
+                'tries' => 3,
             ],
         ],
     ],
