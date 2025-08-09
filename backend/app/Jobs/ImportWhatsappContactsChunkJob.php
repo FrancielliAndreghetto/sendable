@@ -1,58 +1,59 @@
 <?php
 
-
 namespace App\Jobs;
 
 use App\Repositories\Contracts\Whatsapp\Contacts\WhatsappContactRepositoryInterface;
-use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class ImportWhatsappContactsChunkJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected array $contacts;
-    protected string $instanceId;
-    protected string $partnerId;
+    public int $timeout = 300;
 
     public function __construct(
-        array $contacts,
-        string $instanceId,
-        string $partnerId,
-        protected WhatsappContactRepositoryInterface $whatsappContactRepository
-    ) {
-        $this->contacts = $contacts;
-        $this->instanceId = $instanceId;
-        $this->partnerId = $partnerId;
-    }
+        private readonly array $contacts,
+        private readonly string $instanceId,
+        private readonly string $partnerId
+    ) {}
 
-    public function handle(): void
+    public function handle(WhatsappContactRepositoryInterface $whatsappContactRepository): void
     {
         foreach ($this->contacts as $contactData) {
-            if (empty($contactData['remoteJid'])) {
+            if (!$this->isValidContact($contactData)) {
                 continue;
             }
 
-            $number = explode('@', $contactData['remoteJid'])[0];
-            $name = $contactData['pushName'] ?? null;
-            $image = $contactData['profilePicUrl'] ?? null;
+            $contact = $this->transformContact($contactData);
 
-            $whatsappContact = $this->whatsappContactRepository->create([
-                'partner_id' => $this->partnerId,
-                'instance_id' => $this->instanceId,
-                'name' => $name,
-                'number' => $number,
-                'image' => $image,
-            ]);
-
-            if (!$whatsappContact) {
-                logger()->error('Falha ao salvar Contato no banco de dados.');
-                throw new Exception('Falha ao salvar Contato no banco de dados.');
+            try {
+                $whatsappContactRepository->create($contact);
+            } catch (\Exception $e) {
+                Log::error("Failed to save contact {$contact['number']}: {$e->getMessage()}");
             }
         }
+    }
+
+    private function isValidContact(array $contactData): bool
+    {
+        return !empty($contactData['remoteJid']);
+    }
+
+    private function transformContact(array $contactData): array
+    {
+        $number = explode('@', $contactData['remoteJid'])[0];
+
+        return [
+            'partner_id' => $this->partnerId,
+            'instance_id' => $this->instanceId,
+            'name' => $contactData['pushName'] ?? null,
+            'number' => $number,
+            'image' => $contactData['profilePicUrl'] ?? null,
+        ];
     }
 }
