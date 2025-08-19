@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class UpdateWhatsappContactUseCase
 {
     public function __construct(
-        protected WhatsappContactRepositoryInterface $whatsappContactRepository
+        private readonly WhatsappContactRepositoryInterface $whatsappContactRepository
     ) {}
 
     public function execute(string $uuid, UpdateWhatsappContactDTO $dto, string $partnerId): Model

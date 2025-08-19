@@ -2,18 +2,18 @@
 
 namespace App\Services\Whatsapp;
 
-use App\DTOs\Whatsapp\Messages\SendWhatsappMessageDTO;
+use App\DTOs\Whatsapp\Messages\CreateWhatsappMessageDTO;
 use App\Services\Whatsapp\Contracts\WhatsappMessageServiceInterface;
 use App\Services\Whatsapp\Base\AbstractWhatsappService;
 
 class WhatsappMessageService extends AbstractWhatsappService implements WhatsappMessageServiceInterface
 {
-    public function sendMessage(SendWhatsappMessageDTO $dto): array
+    public function sendMessage(string $message, string $number, string $instanceName): array
     {
-        return $this->request('POST', "/message/sendText/{$dto->instance}", [
+        return $this->request('POST', "/message/sendText/{$instanceName}", [
             'form_params' => [
-                'number' => $dto->number,
-                'text' => $dto->message,
+                'number' => $number,
+                'text' => $message,
             ]
         ]);
     }

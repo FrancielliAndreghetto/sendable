@@ -2,7 +2,9 @@
 
 namespace App\DTOs\Whatsapp\Contacts;
 
-class CreateWhatsappContactDTO
+use App\DTOs\BaseDTO;
+
+class CreateWhatsappContactDTO extends BaseDTO
 {
     public ?string $instance_id;
     public string $name;

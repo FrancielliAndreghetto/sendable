@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class CreateWhatsappContactUseCase
 {
     public function __construct(
-        protected WhatsappContactRepositoryInterface $whatsappContactRepository
+        private readonly WhatsappContactRepositoryInterface $whatsappContactRepository
     ) {}
 
     public function execute(CreateWhatsappContactDTO $dto): Model

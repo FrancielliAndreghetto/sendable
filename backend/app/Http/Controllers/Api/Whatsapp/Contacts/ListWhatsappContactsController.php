@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class ListWhatsappContactsController extends Controller
 {
     public function __construct(
-        protected ListWhatsappContactsUseCase $useCase
+        private readonly ListWhatsappContactsUseCase $useCase
     ) {}
 
     public function __invoke(Request $request): JsonResponse

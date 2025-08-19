@@ -2,7 +2,9 @@
 
 namespace App\DTOs\Auth\ApiKeys;
 
-class UpdateApiKeyDTO
+use App\DTOs\BaseDTO;
+
+class UpdateApiKeyDTO extends BaseDTO
 {
     public ?string $name = null;
     public ?bool $active = null;

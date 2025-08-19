@@ -11,9 +11,9 @@ use Illuminate\Http\Request;
 class AuthSanctumOrApiKey
 {
     public function __construct(
-        protected ApiKeyRepositoryInterface $apiKeyRepository,
-        protected AuthTokenRepositoryInterface $authTokenRepository,
-        protected AuthServiceInterface $authService
+        private readonly ApiKeyRepositoryInterface $apiKeyRepository,
+        private readonly AuthTokenRepositoryInterface $authTokenRepository,
+        private readonly AuthServiceInterface $authService
     ) {}
 
     public function handle(Request $request, Closure $next)

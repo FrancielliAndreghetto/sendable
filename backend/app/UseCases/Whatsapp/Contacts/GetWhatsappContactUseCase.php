@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class GetWhatsappContactUseCase
 {
     public function __construct(
-        protected WhatsappContactRepositoryInterface $whatsappContactRepository
+        private readonly WhatsappContactRepositoryInterface $whatsappContactRepository
     ) {}
 
     public function execute(string $uuid, string $partnerId): ?Model

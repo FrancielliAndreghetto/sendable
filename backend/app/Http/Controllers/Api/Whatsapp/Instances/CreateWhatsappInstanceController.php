@@ -11,7 +11,7 @@ use Illuminate\Http\JsonResponse;
 class CreateWhatsappInstanceController extends Controller
 {
     public function __construct(
-        protected CreateWhatsappInstanceUseCase $useCase
+        private readonly CreateWhatsappInstanceUseCase $useCase
     ) {}
 
     public function __invoke(CreateWhatsappInstanceRequest $request): JsonResponse

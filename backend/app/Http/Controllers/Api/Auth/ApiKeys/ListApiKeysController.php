@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class ListApiKeysController extends Controller
 {
     public function __construct(
-        protected ListApiKeysUseCase $useCase
+        private readonly ListApiKeysUseCase $useCase
     ) {}
 
     public function __invoke(Request $request): JsonResponse

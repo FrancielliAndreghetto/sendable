@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\DB;
 class CreateWhatsappInstanceUseCase
 {
     public function __construct(
-        protected WhatsappInstanceServiceInterface $whatsappInstanceService,
-        protected WhatsappInstanceRepositoryInterface $instanceRepository
+        private readonly WhatsappInstanceServiceInterface $whatsappInstanceService,
+        private readonly WhatsappInstanceRepositoryInterface $instanceRepository
     ) {}
 
     public function execute(CreateWhatsappInstanceDTO $dto): Model

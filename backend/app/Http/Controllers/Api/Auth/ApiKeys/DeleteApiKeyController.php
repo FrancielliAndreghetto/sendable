@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class DeleteApiKeyController extends Controller
 {
     public function __construct(
-        protected DeleteApiKeyUseCase $useCase
+        private readonly DeleteApiKeyUseCase $useCase
     ) {}
 
     public function __invoke(Request $request, string $uuid): JsonResponse

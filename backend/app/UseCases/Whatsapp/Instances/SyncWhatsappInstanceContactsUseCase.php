@@ -11,9 +11,9 @@ use Exception;
 class SyncWhatsappInstanceContactsUseCase
 {
     public function __construct(
-        protected WhatsappInstanceServiceInterface $whatsappInstanceService,
-        protected WhatsappInstanceRepositoryInterface $whatsappInstanceRepository,
-        protected WhatsappContactRepositoryInterface $whatsappContactRepository
+        private readonly WhatsappInstanceServiceInterface $whatsappInstanceService,
+        private readonly WhatsappInstanceRepositoryInterface $whatsappInstanceRepository,
+        private readonly WhatsappContactRepositoryInterface $whatsappContactRepository
     ) {}
 
     public function execute(string $uuid, string $partnerId): void

@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class DisconnectWhatsappInstanceController extends Controller
 {
     public function __construct(
-        protected DisconnectWhatsappInstanceUseCase $useCase
+        private readonly DisconnectWhatsappInstanceUseCase $useCase
     ) {}
 
     public function __invoke(Request $request, string $uuid): JsonResponse

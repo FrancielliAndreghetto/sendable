@@ -2,7 +2,9 @@
 
 namespace App\DTOs\Auth\ApiKeys;
 
-class CreateApiKeyDTO
+use App\DTOs\BaseDTO;
+
+class CreateApiKeyDTO extends BaseDTO
 {
     public string $name;
     public string $partner_id;

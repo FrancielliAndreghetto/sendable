@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\DB;
 class DeleteWhatsappInstanceUseCase
 {
     public function __construct(
-        protected WhatsappInstanceServiceInterface $whatsappInstanceService,
-        protected WhatsappInstanceRepositoryInterface $instanceRepository
+        private readonly WhatsappInstanceServiceInterface $whatsappInstanceService,
+        private readonly WhatsappInstanceRepositoryInterface $instanceRepository
     ) {}
 
     public function execute(string $uuid, string $partnerId): bool

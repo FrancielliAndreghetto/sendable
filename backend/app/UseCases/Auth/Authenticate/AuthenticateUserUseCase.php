@@ -9,10 +9,10 @@ use Illuminate\Auth\AuthenticationException;
 
 class AuthenticateUserUseCase
 {
-    protected const TOKEN_NAME = 'api-token';
+    private const TOKEN_NAME = 'api-token';
 
     public function __construct(
-        protected UserRepositoryInterface $userRepository
+        private readonly UserRepositoryInterface $userRepository
     ) {}
 
     public function execute(AuthenticateUserDTO $dto): array

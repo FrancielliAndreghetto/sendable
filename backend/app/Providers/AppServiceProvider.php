@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\WhatsappMessage;
+use App\Observers\WhatsappMessageObserver;
 use App\Repositories\Contracts\Whatsapp\Contacts\WhatsappContactRepositoryInterface;
 use App\Repositories\Eloquent\Whatsapp\Contacts\WhatsappContactRepository;
 use App\Services\Auth\ApiKeyGeneratorService;
@@ -21,6 +23,6 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        //
+        WhatsappMessage::observe(WhatsappMessageObserver::class);
     }
 }

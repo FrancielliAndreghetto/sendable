@@ -9,8 +9,8 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 class ListWhatsappInstancesUseCase
 {
     public function __construct(
-        protected WhatsappInstanceServiceInterface $whatsappInstanceService,
-        protected WhatsappInstanceRepositoryInterface $instanceRepository
+        private readonly WhatsappInstanceServiceInterface $whatsappInstanceService,
+        private readonly WhatsappInstanceRepositoryInterface $instanceRepository
     ) {}
 
     public function execute(string $partnerId): LengthAwarePaginator

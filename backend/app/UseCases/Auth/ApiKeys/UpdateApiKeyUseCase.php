@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class UpdateApiKeyUseCase
 {
     public function __construct(
-        protected ApiKeyRepositoryInterface $apiKeyRepository
+        private readonly ApiKeyRepositoryInterface $apiKeyRepository
     ) {}
 
     public function execute(string $uuid, UpdateApiKeyDTO $dto, string $partnerId): Model

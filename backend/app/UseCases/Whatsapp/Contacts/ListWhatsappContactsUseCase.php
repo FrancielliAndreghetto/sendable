@@ -8,7 +8,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 class ListWhatsappContactsUseCase
 {
     public function __construct(
-        protected WhatsappContactRepositoryInterface $whatsappContactRepository
+        private readonly WhatsappContactRepositoryInterface $whatsappContactRepository
     ) {}
 
     public function execute(string $partnerId, int $perPage = 15, int $page = 1): LengthAwarePaginator

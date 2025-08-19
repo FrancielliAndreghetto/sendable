@@ -11,7 +11,7 @@ use Illuminate\Http\JsonResponse;
 class UpdateWhatsappContactController extends Controller
 {
     public function __construct(
-        protected UpdateWhatsappContactUseCase $useCase
+        private readonly UpdateWhatsappContactUseCase $useCase
     ) {}
 
     public function __invoke(UpdateWhatsappContactRequest $request, string $uuid): JsonResponse

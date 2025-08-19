@@ -2,7 +2,9 @@
 
 namespace App\DTOs\Whatsapp\Contacts;
 
-class UpdateWhatsappContactDTO
+use App\DTOs\BaseDTO;
+
+class UpdateWhatsappContactDTO extends BaseDTO
 {
     public ?string $instance_id = null;
     public ?string $name = null;

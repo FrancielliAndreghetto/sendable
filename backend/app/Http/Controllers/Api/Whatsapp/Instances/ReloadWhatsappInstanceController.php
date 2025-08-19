@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class ReloadWhatsappInstanceController extends Controller
 {
     public function __construct(
-        protected ReloadWhatsappInstanceUseCase $useCase
+        private readonly ReloadWhatsappInstanceUseCase $useCase
     ) {}
 
     public function __invoke(Request $request, string $uuid): JsonResponse

@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class SyncWhatsappInstanceContactsController extends Controller
 {
     public function __construct(
-        protected SyncWhatsappInstanceContactsUseCase $useCase
+        private readonly SyncWhatsappInstanceContactsUseCase $useCase
     ) {}
 
     public function __invoke(Request $request, string $uuid): JsonResponse

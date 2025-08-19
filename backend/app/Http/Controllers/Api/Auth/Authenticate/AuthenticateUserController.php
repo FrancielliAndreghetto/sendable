@@ -12,7 +12,7 @@ use Illuminate\Auth\AuthenticationException;
 class AuthenticateUserController extends Controller
 {
     public function __construct(
-        protected AuthenticateUserUseCase $useCase
+        private readonly AuthenticateUserUseCase $useCase
     ) {}
 
     public function __invoke(AuthenticateUserRequest $request): JsonResponse

@@ -11,7 +11,7 @@ use Illuminate\Http\JsonResponse;
 class CreateApiKeyController extends Controller
 {
     public function __construct(
-        protected CreateApiKeyUseCase $useCase
+        private readonly CreateApiKeyUseCase $useCase
     ) {}
 
     public function __invoke(CreateApiKeyRequest $request): JsonResponse

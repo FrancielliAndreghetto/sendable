@@ -8,7 +8,7 @@ use Exception;
 class DeleteApiKeyUseCase
 {
     public function __construct(
-        protected ApiKeyRepositoryInterface $apiKeyRepository
+        private readonly ApiKeyRepositoryInterface $apiKeyRepository
     ) {}
 
     public function execute(string $uuid, string $partnerId): bool

@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class DeleteWhatsappContactController extends Controller
 {
     public function __construct(
-        protected DeleteWhatsappContactUseCase $useCase
+        private readonly DeleteWhatsappContactUseCase $useCase
     ) {}
 
     public function __invoke(Request $request, string $uuid): JsonResponse

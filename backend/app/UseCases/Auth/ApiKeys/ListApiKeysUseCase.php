@@ -8,7 +8,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 class ListApiKeysUseCase
 {
     public function __construct(
-        protected ApiKeyRepositoryInterface $apiKeyRepository
+        private readonly ApiKeyRepositoryInterface $apiKeyRepository
     ) {}
 
     public function execute(string $partnerId, int $perPage = 15, int $page = 1): LengthAwarePaginator

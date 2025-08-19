@@ -2,7 +2,9 @@
 
 namespace App\DTOs\Whatsapp\Instances;
 
-class CreateWhatsappInstanceDTO
+use App\DTOs\BaseDTO;
+
+class CreateWhatsappInstanceDTO extends BaseDTO
 {
     public string $name;
     public string $number;

@@ -8,7 +8,7 @@ use Exception;
 class DeleteWhatsappContactUseCase
 {
     public function __construct(
-        protected WhatsappContactRepositoryInterface $whatsappContactRepository
+        private readonly WhatsappContactRepositoryInterface $whatsappContactRepository
     ) {}
 
     public function execute(string $uuid, string $partnerId): bool

@@ -11,8 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 class CreateApiKeyUseCase
 {
     public function __construct(
-        protected ApiKeyRepositoryInterface $apiKeyRepository,
-        protected ApiKeyGeneratorServiceInterface $apikeyGeneratorService
+        private readonly ApiKeyRepositoryInterface $apiKeyRepository,
+        private readonly ApiKeyGeneratorServiceInterface $apikeyGeneratorService
     ) {}
 
     public function execute(CreateApiKeyDTO $dto): Model

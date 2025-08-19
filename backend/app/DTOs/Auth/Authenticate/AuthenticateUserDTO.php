@@ -2,7 +2,9 @@
 
 namespace App\DTOs\Auth\Authenticate;
 
-class AuthenticateUserDTO
+use App\DTOs\BaseDTO;
+
+class AuthenticateUserDTO extends BaseDTO
 {
     public string $email;
     public string $password;
