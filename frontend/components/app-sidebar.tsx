@@ -27,6 +27,8 @@ import {
   RiLeafLine,
   RiLogoutBoxLine,
   RiKey2Line,
+  RiMessage2Line,
+  RiInstanceLine,
 } from "@remixicon/react";
 import { usePathname } from "next/navigation";
 
@@ -34,7 +36,7 @@ import { usePathname } from "next/navigation";
 const data = {
   teams: [
     {
-      name: "InnovaCraft",
+      name: "Schedule",
       logo: "https://raw.githubusercontent.com/origin-space/origin-images/refs/heads/main/exp1/logo-01_kp2j8x.png",
     },
     {
@@ -62,29 +64,19 @@ const data = {
           icon: RiKey2Line,
         },
         {
-          title: "Contacts",
+          title: "Contatos",
           url: "#",
           icon: RiUserFollowLine,
         },
         {
-          title: "Tools",
+          title: "Instâncias",
           url: "#",
-          icon: RiCodeSSlashLine,
+          icon: RiInstanceLine,
         },
         {
-          title: "Integration",
-          url: "#",
-          icon: RiLoginCircleLine,
-        },
-        {
-          title: "Layouts",
-          url: "#",
-          icon: RiLayoutLeftLine,
-        },
-        {
-          title: "Reports",
-          url: "#",
-          icon: RiLeafLine,
+          title: "Mensagens",
+          url: "/auth/messages",
+          icon: RiMessage2Line,
         },
       ],
     },

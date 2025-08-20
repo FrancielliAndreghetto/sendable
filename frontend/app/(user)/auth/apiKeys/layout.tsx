@@ -58,6 +58,11 @@ export default function ApiKeysLayout(){
                                Visualize e gerencie suas chaves de API.
                             </p>
                         </div>
+                        <div>
+                            <button className="bg-gradient-to-r from-primary/40 to-primary/20 hover:from-primary/60 hover:to-primary/30 text-white font-bold py-2 px-4 rounded">
+                              Gerar nova chave de API
+                            </button>
+                        </div>
                     </div>
                     <div className="bg-gradient-to-b from-sidebar/60 to-sidebar p-3 rounded-2xl border border-border">  
                         <Table>
