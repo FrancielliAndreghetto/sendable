@@ -9,7 +9,7 @@ use Carbon\Carbon;
 class WhatsappMessageObserver
 {
     private const WHATSAPP_MESSAGES_QUEUE = 'whatsapp_messages';
-    private const SCHEDULABLE_FIELDS = ['scheduled_date', 'sent_at'];
+    private const SCHEDULABLE_FIELDS = ['scheduled_date', 'next_send_at'];
 
     public function created(WhatsappMessage $message): void
     {
@@ -41,8 +41,9 @@ class WhatsappMessageObserver
 
     private function determineScheduleDate(WhatsappMessage $message): ?Carbon
     {
-        if ($this->hasRecurrenceDate($message)) {
-            return Carbon::parse($message->sent_at);
+        // Priority: next_send_at (always current) > scheduled_date (initial)
+        if ($this->hasNextSendDate($message)) {
+            return Carbon::parse($message->next_send_at);
         }
 
         if ($this->hasInitialScheduleDate($message)) {
@@ -52,9 +53,9 @@ class WhatsappMessageObserver
         return null;
     }
 
-    private function hasRecurrenceDate(WhatsappMessage $message): bool
+    private function hasNextSendDate(WhatsappMessage $message): bool
     {
-        return !empty($message->sent_at);
+        return !empty($message->next_send_at);
     }
 
     private function hasInitialScheduleDate(WhatsappMessage $message): bool

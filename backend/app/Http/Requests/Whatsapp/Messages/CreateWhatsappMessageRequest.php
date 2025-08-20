@@ -16,7 +16,9 @@ class CreateWhatsappMessageRequest extends FormRequest
             'message' => 'required|string',
             'scheduled_date' => 'nullable|date_format:Y-m-d H:i:s',
             'custom_code' => 'nullable|string',
-            'sent_at' => 'nullable|date_format:Y-m-d H:i:s',
+            'is_recurring' => 'sometimes|boolean',
+            'recurrence_type' => 'sometimes|string|in:daily,weekly,monthly,quarterly,yearly',
+            'recurrence_interval' => 'sometimes|integer|min:1',
         ];
     }
 

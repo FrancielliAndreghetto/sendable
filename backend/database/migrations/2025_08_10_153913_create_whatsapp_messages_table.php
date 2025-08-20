@@ -22,7 +22,6 @@ return new class extends Migration
             $table->timestamp('scheduled_date')->nullable();
             $table->integer('status_id')->default(0);
 
-            $table->timestamp('sent_at')->nullable();
             $table->text('error_message')->nullable();
             $table->string('delivery_status')->nullable();
 

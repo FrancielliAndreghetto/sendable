@@ -18,7 +18,11 @@ use App\Http\Controllers\Api\Whatsapp\Instances\DisconnectWhatsappInstanceContro
 use App\Http\Controllers\Api\Whatsapp\Instances\ListWhatsappInstancesController;
 use App\Http\Controllers\Api\Whatsapp\Instances\ReloadWhatsappInstanceController;
 use App\Http\Controllers\Api\Whatsapp\Instances\SyncWhatsappInstanceContactsController;
-use App\Http\Controllers\Api\Whatsapp\Messages\SendWhatsappMessageController;
+use App\Http\Controllers\Api\Whatsapp\Messages\CreateWhatsappMessageController;
+use App\Http\Controllers\Api\Whatsapp\Messages\DeleteWhatsappMessageController;
+use App\Http\Controllers\Api\Whatsapp\Messages\GetWhatsappMessageController;
+use App\Http\Controllers\Api\Whatsapp\Messages\ListWhatsappMessagesController;
+use App\Http\Controllers\Api\Whatsapp\Messages\UpdateWhatsappMessageController;
 use App\Http\Middleware\AuthSanctumOrApiKey;
 use Illuminate\Support\Facades\Route;
 
@@ -36,7 +40,13 @@ Route::prefix('whatsapp')->middleware([AuthSanctumOrApiKey::class])->name('whats
         Route::post('/syncContacts/{uuid}', SyncWhatsappInstanceContactsController::class)->name('syncContacts');
     });
 
-    Route::post('/messages/send', SendWhatsappMessageController::class)->name('messages.send');
+    Route::prefix('messages')->name('messages.')->group(function () {
+        Route::get('', ListWhatsappMessagesController::class)->name('index');
+        Route::post('', CreateWhatsappMessageController::class)->name('store');
+        Route::get('/{uuid}', GetWhatsappMessageController::class)->name('show');
+        Route::put('/{uuid}', UpdateWhatsappMessageController::class)->name('update');
+        Route::delete('/{uuid}', DeleteWhatsappMessageController::class)->name('destroy');
+    });
 
     Route::prefix('contacts')->name('contacts.')->group(function () {
         Route::get('', ListWhatsappContactsController::class)->name('index');

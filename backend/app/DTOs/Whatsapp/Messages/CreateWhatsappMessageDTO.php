@@ -13,8 +13,11 @@ class CreateWhatsappMessageDTO extends BaseDTO
     public string $message;
     public ?string $scheduled_date;
     public ?string $custom_code;
-    public ?string $sent_at;
     public string $partner_id;
+    public bool $is_recurring;
+    public ?string $recurrence_type;
+    public ?int $recurrence_interval;
+    public ?string $next_send_at;
 
     public function __construct(array $data, $partnerId)
     {
@@ -25,7 +28,33 @@ class CreateWhatsappMessageDTO extends BaseDTO
         $this->message = $data['message'];
         $this->scheduled_date = $data['scheduled_date'] ?? null;
         $this->custom_code = $data['custom_code'];
-        $this->sent_at = $data['sent_at'] ?? null;
         $this->partner_id = $partnerId;
+        $this->is_recurring = $data['is_recurring'] ?? false;
+        $this->recurrence_type = $data['recurrence_type'] ?? null;
+        $this->recurrence_interval = $data['recurrence_interval'] ?? null;
+        $this->next_send_at = $this->calculateNextSendAt();
+    }
+
+    private function calculateNextSendAt(): ?string
+    {
+        if ($this->scheduled_date) {
+            return $this->scheduled_date;
+        }
+
+        return null;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'instance_id' => $this->instance_id,
+            'contact_id' => $this->contact_id,
+            'number' => $this->number,
+            'name' => $this->name,
+            'message' => $this->message,
+            'scheduled_date' => $this->scheduled_date,
+            'custom_code' => $this->custom_code,
+            'partner_id' => $this->partner_id,
+        ];
     }
 }

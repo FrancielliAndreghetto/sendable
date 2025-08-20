@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\WhatsappMessage;
+use App\Services\Whatsapp\Contracts\WhatsappMessageServiceInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -22,13 +23,12 @@ class SendWhatsappMessageJob implements ShouldQueue
     private const STATUS_FAILED = 0;
     private const DELIVERY_STATUS_SENT = 'enviada';
     private const DELIVERY_STATUS_FAILED = 'falha';
-    private const DEFAULT_RECURRENCE_DAYS = 7;
 
     public function __construct(
         private readonly string $messageId
     ) {}
 
-    public function handle(): void
+    public function handle(WhatsappMessageServiceInterface $whatsappMessageService): void
     {
         $message = $this->findMessage();
 
@@ -36,7 +36,7 @@ class SendWhatsappMessageJob implements ShouldQueue
             return;
         }
 
-        $this->processMessageSending($message);
+        $this->processMessageSending($message, $whatsappMessageService);
     }
 
     private function findMessage(): ?WhatsappMessage
@@ -61,24 +61,52 @@ class SendWhatsappMessageJob implements ShouldQueue
         ]);
     }
 
-    private function processMessageSending(WhatsappMessage $message): void
+    private function processMessageSending(WhatsappMessage $message, WhatsappMessageServiceInterface $service): void
     {
         try {
-            $this->sendMessage($message);
+            $result = $this->sendMessage($message, $service);
+
+            if (!$result['success']) {
+                $this->handleFailedSend($message, $result['message'] ?? 'Falha no envio da mensagem');
+                return;
+            }
+
             $this->handleSuccessfulSend($message);
         } catch (\Exception $e) {
             $this->handleFailedSend($message, $e->getMessage());
         }
     }
 
-    private function sendMessage(WhatsappMessage $message): void
+    private function sendMessage(WhatsappMessage $message, WhatsappMessageServiceInterface $service): array
     {
-        // Simula envio via API externa
+        if (!$this->validateMessageForSending($message)) {
+            throw new \Exception('Mensagem inválida para envio');
+        }
+
+        $instanceName = $this->getInstanceName($message);
+
         Log::info("Enviando mensagem para {$message->number}", [
-            'message_id' => $message->id
+            'message_id' => $message->id,
+            'instance' => $instanceName
         ]);
 
-        // Aqui vai a chamada real para a API do WhatsApp
+        return $service->sendMessage(
+            $message->message,
+            $message->number,
+            $instanceName
+        );
+    }
+
+    private function validateMessageForSending(WhatsappMessage $message): bool
+    {
+        return !empty($message->message) &&
+            !empty($message->number) &&
+            !empty($message->instance_id);
+    }
+
+    private function getInstanceName(WhatsappMessage $message): string
+    {
+        return $message->instance->external_name ?? $message->instance->id;
     }
 
     private function handleSuccessfulSend(WhatsappMessage $message): void
@@ -98,18 +126,13 @@ class SendWhatsappMessageJob implements ShouldQueue
             'error_message' => null
         ];
 
-        $updateData['sent_at'] = $this->calculateSentAtDate($message);
-
-        return $updateData;
-    }
-
-    private function calculateSentAtDate(WhatsappMessage $message): Carbon
-    {
         if ($this->hasRecurrence($message)) {
-            return $this->calculateNextSendDate($message);
+            $updateData['next_send_at'] = $this->calculateNextSendDate($message);
+        } else {
+            $updateData['next_send_at'] = null; // Não há próximo envio
         }
 
-        return now();
+        return $updateData;
     }
 
     private function logSuccessfulSend(WhatsappMessage $message): void
@@ -149,22 +172,21 @@ class SendWhatsappMessageJob implements ShouldQueue
 
     private function hasRecurrence(WhatsappMessage $message): bool
     {
-        // TODO: Implementar lógica de recorrência baseada no modelo
-        return !empty($message->recurrence_interval);
+        return $message->isRecurring();
     }
 
     private function calculateNextSendDate(WhatsappMessage $message): Carbon
     {
         $currentSendDate = $this->getCurrentSendDate($message);
+        $daysToAdd = $message->getRecurrenceIntervalInDays();
 
-        // TODO: Implementar lógica baseada no tipo de recorrência
-        return $currentSendDate->addDays(self::DEFAULT_RECURRENCE_DAYS);
+        return $currentSendDate->addDays($daysToAdd);
     }
 
     private function getCurrentSendDate(WhatsappMessage $message): Carbon
     {
-        return $message->sent_at ?
-            Carbon::parse($message->sent_at) :
+        return $message->next_send_at ?
+            Carbon::parse($message->next_send_at) :
             Carbon::parse($message->scheduled_date);
     }
 }

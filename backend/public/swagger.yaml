@@ -1602,3 +1602,730 @@ paths:
                   message:
                     type: string
                     example: Erro interno.
+  # ===== WHATSAPP MESSAGES =====
+  /whatsapp/messages:
+    get:
+      tags:
+        - Whatsapp - Mensagens
+      summary: Listar todas as mensagens WhatsApp
+      parameters:
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+            default: 15
+            minimum: 1
+            maximum: 100
+          description: Número de itens por página
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          description: Número da página
+      responses:
+        '200':
+          description: Lista paginada de mensagens
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Mensagens consultadas com sucesso.
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          example: "123e4567-e89b-12d3-a456-426614174000"
+                        partner_id:
+                          type: string
+                          format: uuid
+                          example: "01986209-ae94-7192-9aa4-0497be95ab14"
+                        instance_id:
+                          type: string
+                          format: uuid
+                          example: "69978009-ae94-7192-9aa4-04974e95ab14"
+                        contact_id:
+                          type: array
+                          items:
+                            type: string
+                            format: uuid
+                          example: ["123e4567-e89b-12d3-a456-426614174001", "123e4567-e89b-12d3-a456-426614174002"]
+                        name:
+                          type: string
+                          example: João Silva
+                        number:
+                          type: string
+                          example: "5511999999999"
+                        message:
+                          type: string
+                          example: Olá! Esta é uma mensagem de teste.
+                        scheduled_date:
+                          type: string
+                          format: date-time
+                          nullable: true
+                          example: "2024-01-01T10:00:00"
+                        status_id:
+                          type: integer
+                          example: 1
+                          description: 0 = Pendente/Falha, 1 = Enviada com sucesso
+                        next_send_at:
+                          type: string
+                          format: date-time
+                          nullable: true
+                          example: "2024-01-01T10:00:00"
+                        error_message:
+                          type: string
+                          nullable: true
+                          example: null
+                        delivery_status:
+                          type: string
+                          nullable: true
+                          example: "enviada"
+                          description: "enviada, falha ou null"
+                        custom_code:
+                          type: string
+                          nullable: true
+                          example: "MSG_001"
+                        created_at:
+                          type: string
+                          format: date-time
+                          example: "2024-01-01T10:00:00.000000Z"
+                        updated_at:
+                          type: string
+                          format: date-time
+                          example: "2024-01-01T10:00:00.000000Z"
+                        instance:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                              example: "69978009-ae94-7192-9aa4-04974e95ab14"
+                            name:
+                              type: string
+                              example: Instância Principal
+                        contact:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                              example: "123e4567-e89b-12d3-a456-426614174001"
+                            name:
+                              type: string
+                              example: João Silva
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                        example: 1
+                      last_page:
+                        type: integer
+                        example: 5
+                      per_page:
+                        type: integer
+                        example: 15
+                      total:
+                        type: integer
+                        example: 75
+                      next_page_url:
+                        type: string
+                        nullable: true
+                        example: "http://localhost/api/whatsapp/messages?page=2"
+                      prev_page_url:
+                        type: string
+                        nullable: true
+                        example: null
+        '401':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Não autorizado.
+        '500':
+          description: Erro interno
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Falha ao listar mensagens.
+    post:
+      tags:
+        - Whatsapp - Mensagens
+      summary: Criar uma nova mensagem WhatsApp
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - instance_id
+                - name
+                - message
+              properties:
+                instance_id:
+                  type: string
+                  format: uuid
+                  example: "69978009-ae94-7192-9aa4-04974e95ab14"
+                  description: UUID da instância WhatsApp
+                contact_id:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                  nullable: true
+                  example: ["123e4567-e89b-12d3-a456-426614174001", "123e4567-e89b-12d3-a456-426614174002"]
+                  description: Array de UUIDs dos contatos
+                number:
+                  type: string
+                  nullable: true
+                  example: "5511999999999"
+                  description: Número de telefone (opcional se contact_id for fornecido)
+                name:
+                  type: string
+                  example: João Silva
+                  description: Nome do contato
+                message:
+                  type: string
+                  example: Olá! Esta é uma mensagem de teste.
+                  description: Conteúdo da mensagem
+                scheduled_date:
+                  type: string
+                  format: date-time
+                  nullable: true
+                  example: "2024-01-01T10:00:00"
+                  description: Data e hora agendada para envio
+                custom_code:
+                  type: string
+                  nullable: true
+                  example: "MSG_001"
+                  description: Código personalizado para identificação
+                is_recurring:
+                  type: boolean
+                  default: false
+                  example: false
+                  description: Define se a mensagem é recorrente
+                recurrence_type:
+                  type: string
+                  enum: [daily, weekly, monthly, quarterly, yearly]
+                  nullable: true
+                  example: "weekly"
+                  description: Tipo de recorrência (obrigatório se is_recurring for true)
+                recurrence_interval:
+                  type: integer
+                  minimum: 1
+                  nullable: true
+                  example: 2
+                  description: "Intervalo de recorrência (ex: 2 para (a cada 2 semanas))"
+      responses:
+        '201':
+          description: Mensagem criada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Mensagem criada com sucesso.
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: "123e4567-e89b-12d3-a456-426614174000"
+                      partner_id:
+                        type: string
+                        format: uuid
+                        example: "01986209-ae94-7192-9aa4-0497be95ab14"
+                      instance_id:
+                        type: string
+                        format: uuid
+                        example: "69978009-ae94-7192-9aa4-04974e95ab14"
+                      contact_id:
+                        type: array
+                        items:
+                          type: string
+                          format: uuid
+                        example: ["123e4567-e89b-12d3-a456-426614174001", "123e4567-e89b-12d3-a456-426614174002"]
+                      name:
+                        type: string
+                        example: João Silva
+                      number:
+                        type: string
+                        example: "5511999999999"
+                      message:
+                        type: string
+                        example: Olá! Esta é uma mensagem de teste.
+                      scheduled_date:
+                        type: string
+                        format: date-time
+                        nullable: true
+                        example: "2024-01-01T10:00:00"
+                      status_id:
+                        type: integer
+                        example: 0
+                      next_send_at:
+                        type: string
+                        format: date-time
+                        nullable: true
+                        example: "2024-01-01T10:00:00"
+                        description: "Data do próximo envio"
+                      error_message:
+                        type: string
+                        nullable: true
+                        example: null
+                      delivery_status:
+                        type: string
+                        nullable: true
+                        example: null
+                      custom_code:
+                        type: string
+                        nullable: true
+                        example: "MSG_001"
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: "2024-01-01T10:00:00.000000Z"
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: "2024-01-01T10:00:00.000000Z"
+        '400':
+          description: Dados inválidos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Dados inválidos.
+        '500':
+          description: Falha ao criar mensagem
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Falha ao criar mensagem.
+  /whatsapp/messages/{uuid}:
+    get:
+      tags:
+        - Whatsapp - Mensagens
+      summary: Buscar uma mensagem específica por UUID
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: UUID da mensagem
+      responses:
+        '200':
+          description: Mensagem encontrada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Mensagem consultada com sucesso.
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: "123e4567-e89b-12d3-a456-426614174000"
+                      partner_id:
+                        type: string
+                        format: uuid
+                        example: "01986209-ae94-7192-9aa4-0497be95ab14"
+                      instance_id:
+                        type: string
+                        format: uuid
+                        example: "69978009-ae94-7192-9aa4-04974e95ab14"
+                      contact_id:
+                        type: array
+                        items:
+                          type: string
+                          format: uuid
+                        example: ["123e4567-e89b-12d3-a456-426614174001", "123e4567-e89b-12d3-a456-426614174002"]
+                      name:
+                        type: string
+                        example: João Silva
+                      number:
+                        type: string
+                        example: "5511999999999"
+                      message:
+                        type: string
+                        example: Olá! Esta é uma mensagem de teste.
+                      scheduled_date:
+                        type: string
+                        format: date-time
+                        nullable: true
+                        example: "2024-01-01T10:00:00"
+                      status_id:
+                        type: integer
+                        example: 1
+                      next_send_at:
+                        type: string
+                        format: date-time
+                        nullable: true
+                        example: "2024-01-01T10:00:00"
+                      error_message:
+                        type: string
+                        nullable: true
+                        example: null
+                      delivery_status:
+                        type: string
+                        nullable: true
+                        example: "enviada"
+                      custom_code:
+                        type: string
+                        nullable: true
+                        example: "MSG_001"
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: "2024-01-01T10:00:00.000000Z"
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: "2024-01-01T10:00:00.000000Z"
+        '404':
+          description: Mensagem não encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Mensagem não encontrada.
+        '401':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Não autorizado.
+        '500':
+          description: Erro interno
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Falha ao consultar mensagem.
+    put:
+      tags:
+        - Whatsapp - Mensagens
+      summary: Atualizar uma mensagem existente
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: UUID da mensagem a ser atualizada
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                instance_id:
+                  type: string
+                  format: uuid
+                  nullable: true
+                  example: "69978009-ae94-7192-9aa4-04974e95ab14"
+                  description: UUID da instância WhatsApp
+                contact_id:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                  nullable: true
+                  example: ["123e4567-e89b-12d3-a456-426614174001", "123e4567-e89b-12d3-a456-426614174002"]
+                  description: Array de UUIDs dos contatos
+                number:
+                  type: string
+                  nullable: true
+                  example: "5511999999999"
+                  description: Número de telefone
+                name:
+                  type: string
+                  nullable: true
+                  example: João Silva Atualizado
+                  description: Nome do contato
+                message:
+                  type: string
+                  nullable: true
+                  example: Olá! Esta é uma mensagem atualizada.
+                  description: Conteúdo da mensagem
+                scheduled_date:
+                  type: string
+                  format: date-time
+                  nullable: true
+                  example: "2024-01-01T11:00:00"
+                  description: Nova data e hora agendada
+                custom_code:
+                  type: string
+                  nullable: true
+                  example: "MSG_001_UPDATED"
+                  description: Código personalizado atualizado
+      responses:
+        '200':
+          description: Mensagem atualizada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Mensagem atualizada com sucesso.
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: "123e4567-e89b-12d3-a456-426614174000"
+                      partner_id:
+                        type: string
+                        format: uuid
+                        example: "01986209-ae94-7192-9aa4-0497be95ab14"
+                      instance_id:
+                        type: string
+                        format: uuid
+                        example: "69978009-ae94-7192-9aa4-04974e95ab14"
+                      contact_id:
+                        type: array
+                        items:
+                          type: string
+                          format: uuid
+                        example: ["123e4567-e89b-12d3-a456-426614174001", "123e4567-e89b-12d3-a456-426614174002"]
+                      name:
+                        type: string
+                        example: João Silva Atualizado
+                      number:
+                        type: string
+                        example: "5511999999999"
+                      message:
+                        type: string
+                        example: Olá! Esta é uma mensagem atualizada.
+                      scheduled_date:
+                        type: string
+                        format: date-time
+                        nullable: true
+                        example: "2024-01-01T11:00:00"
+                      status_id:
+                        type: integer
+                        example: 0
+                      next_send_at:
+                        type: string
+                        format: date-time
+                        nullable: true
+                        example: null
+                      error_message:
+                        type: string
+                        nullable: true
+                        example: null
+                      delivery_status:
+                        type: string
+                        nullable: true
+                        example: null
+                      custom_code:
+                        type: string
+                        nullable: true
+                        example: "MSG_001_UPDATED"
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: "2024-01-01T10:00:00.000000Z"
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: "2024-01-01T11:00:00.000000Z"
+        '404':
+          description: Mensagem não encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Mensagem não encontrada.
+        '400':
+          description: Dados inválidos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Dados inválidos.
+        '401':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Não autorizado.
+        '500':
+          description: Erro interno
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Falha ao atualizar mensagem.
+    delete:
+      tags:
+        - Whatsapp - Mensagens
+      summary: Deletar uma mensagem
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: UUID da mensagem a ser deletada
+      responses:
+        '200':
+          description: Mensagem deletada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Mensagem deletada com sucesso.
+        '404':
+          description: Mensagem não encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Mensagem não encontrada.
+        '401':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Não autorizado.
+        '500':
+          description: Erro interno
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Falha ao deletar mensagem.

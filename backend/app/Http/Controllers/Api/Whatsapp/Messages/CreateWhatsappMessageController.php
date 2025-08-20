@@ -21,7 +21,7 @@ class CreateWhatsappMessageController extends Controller
             $dto = new CreateWhatsappMessageDTO($request->validated(), $partnerId);
             $response = $this->useCase->execute($dto);
 
-            return $this->successResponse('Falha ao criar mensagem.', $response);
+            return $this->successResponse('Mensagem criada com sucesso.', $response);
         } catch (\Throwable $exception) {
             return $this->errorResponse(
                 'Falha ao criar mensagem.',

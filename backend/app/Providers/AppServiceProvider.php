@@ -4,8 +4,6 @@ namespace App\Providers;
 
 use App\Models\WhatsappMessage;
 use App\Observers\WhatsappMessageObserver;
-use App\Repositories\Contracts\Whatsapp\Contacts\WhatsappContactRepositoryInterface;
-use App\Repositories\Eloquent\Whatsapp\Contacts\WhatsappContactRepository;
 use App\Services\Auth\ApiKeyGeneratorService;
 use App\Services\Auth\AuthService;
 use App\Services\Auth\Contracts\ApiKeyGeneratorServiceInterface;
@@ -18,7 +16,6 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(AuthServiceInterface::class, AuthService::class);
         $this->app->bind(ApiKeyGeneratorServiceInterface::class, ApiKeyGeneratorService::class);
-        $this->app->bind(WhatsappContactRepositoryInterface::class, WhatsappContactRepository::class);
     }
 
     public function boot(): void
