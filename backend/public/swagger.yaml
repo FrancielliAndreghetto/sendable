@@ -1130,6 +1130,78 @@ paths:
                     type: string
                     example: Falha ao recarregar a instância.
 
+  /whatsapp/instances/sync-contacts/{uuid}:
+    post:
+      tags:
+        - Whatsapp - Instâncias
+      summary: Sincronizar contatos da instância WhatsApp
+      description: Inicia a sincronização de contatos da instância WhatsApp. Os contatos são processados em segundo plano através de jobs.
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: UUID da instância WhatsApp
+      responses:
+        '200':
+          description: Sincronização iniciada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Contatos estão sendo salvos em segundo plano.
+                  data:
+                    type: object
+                    nullable: true
+                    example: null
+        '404':
+          description: Instância não encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Nenhuma instância encontrada com o UUID fornecido.
+        '401':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Não autorizado.
+        '500':
+          description: Erro interno
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Falha ao sincronizar contatos.
+
   # ===== WHATSAPP CONTACTS =====
   /whatsapp/contacts:
     post:
