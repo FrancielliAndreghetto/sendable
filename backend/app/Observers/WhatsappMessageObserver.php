@@ -41,7 +41,6 @@ class WhatsappMessageObserver
 
     private function determineScheduleDate(WhatsappMessage $message): ?Carbon
     {
-        // Priority: next_send_at (always current) > scheduled_date (initial)
         if ($this->hasNextSendDate($message)) {
             return Carbon::parse($message->next_send_at);
         }

@@ -34,25 +34,64 @@ const buttonVariants = cva(
   },
 );
 
+interface ButtonProps extends React.ComponentProps<"button">, VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
+  icon?: React.ReactNode;
+  iconPosition?: 'left' | 'right';
+  iconOnly?: boolean;
+}
+
 function Button({
   className,
   variant,
   size,
   asChild = false,
+  icon,
+  iconPosition = 'left',
+  iconOnly = false,
+  children,
   ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean;
-  }) {
+}: ButtonProps) {
   const Comp = asChild ? Slot : "button";
+
+  // Se for iconOnly, força o size para 'icon' e remove o gap
+  const buttonSize = iconOnly ? 'icon' : size;
+  const buttonClass = iconOnly 
+    ? cn(buttonVariants({ variant, size: buttonSize }), "gap-0", className)
+    : cn(buttonVariants({ variant, size: buttonSize, className }));
+
+  const renderContent = () => {
+    if (iconOnly) {
+      return icon;
+    }
+
+    if (!icon) {
+      return children;
+    }
+
+    return iconPosition === 'left' ? (
+      <>
+        {icon}
+        {children}
+      </>
+    ) : (
+      <>
+        {children}
+        {icon}
+      </>
+    );
+  };
 
   return (
     <Comp
       data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={buttonClass}
       {...props}
-    />
+    >
+      {renderContent()}
+    </Comp>
   );
 }
 
 export { Button, buttonVariants };
+export type { ButtonProps };

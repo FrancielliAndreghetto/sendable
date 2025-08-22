@@ -2207,6 +2207,29 @@ paths:
                   nullable: true
                   example: "MSG_001_UPDATED"
                   description: Código personalizado atualizado
+                next_send_at:
+                  type: string
+                  format: date-time
+                  nullable: true
+                  example: "2024-01-01T11:00:00"
+                  description: Próxima data de envio para mensagens recorrentes
+                is_recurring:
+                  type: boolean
+                  nullable: true
+                  example: true
+                  description: Define se a mensagem é recorrente
+                recurrence_type:
+                  type: string
+                  enum: [daily, weekly, monthly, quarterly, yearly]
+                  nullable: true
+                  example: "monthly"
+                  description: Tipo de recorrência (obrigatório se is_recurring for true)
+                recurrence_interval:
+                  type: integer
+                  minimum: 1
+                  nullable: true
+                  example: 3
+                  description: "Intervalo de recorrência (ex: 3 para a cada 3 meses)"
       responses:
         '200':
           description: Mensagem atualizada com sucesso

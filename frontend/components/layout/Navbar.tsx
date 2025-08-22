@@ -103,7 +103,7 @@ const Navbar = () => {
   return (
     <>
       <nav className="h-14 border-b  bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto flex h-full items-center justify-between px-4">
+        <div className=" mx-auto flex h-full items-center justify-between px-4">
           <Link href="/" className="text-lg font-semibold transition-colors hover:text-primary">
             {APP_NAME}
           </Link>
