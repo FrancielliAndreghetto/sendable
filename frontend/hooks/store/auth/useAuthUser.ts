@@ -52,8 +52,12 @@ const useAuthUser = () => {
       const userStr = getItemLocalStorage("user");
       const user = userStr ? JSON.parse(userStr) : null;
 
+      console.log('useAuthUser - Hydrating with token:', token ? 'exists' : 'null', 'user:', user ? 'exists' : 'null');
+
       store.initialize(token, user);
       setIsHydrated(true);
+      
+      console.log('useAuthUser - Store initialized, isAuthenticated:', store.isAuthenticated);
     }
   }, [isHydrated, store]);
 

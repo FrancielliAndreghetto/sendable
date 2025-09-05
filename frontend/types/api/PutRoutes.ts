@@ -1,10 +1,9 @@
 export enum PutRoutes {
   UpdateProfile = "/profile",
+  UpdateContact = "/whatsapp/contacts/:id",
+  UpdateInstance = "/whatsapp/instances/:id",
 }
 
 export enum PutRoutesWithParams {
-  /**
-   * @param id = UserId - required
-   */
-  UpdateUser = "/admin/user/:id",
+  test = "/test/:id",
 }

@@ -19,7 +19,7 @@ const Page = () => {
   const { mutate: toggleBlock } = useToggleBlock();
 
   const handleEditClick = useCallback((user: IUser) => {
-    setEditing({ userId: user._id!, name: user.name! });
+    setEditing({ userId: user.id!, name: user.name! });
   }, []);
 
   const handleInputChange = useCallback((field: "name", value: string) => {
@@ -30,7 +30,7 @@ const Page = () => {
     if (!editing.userId) return;
 
     mutate(
-      { _id: editing.userId, name: editing.name },
+      { id: editing.userId, name: editing.name },
       {
         onSuccess: () => {
           setEditing({ userId: null, name: "" });
@@ -46,7 +46,7 @@ const Page = () => {
 
   const toggleBlockStatus = useCallback(
     (user: IUser) => {
-      toggleBlock(user._id!, {
+      toggleBlock(user.id!, {
         onSuccess: () => {
           refetch();
         },

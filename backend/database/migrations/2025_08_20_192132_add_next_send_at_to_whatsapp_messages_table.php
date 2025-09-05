@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('whatsapp_messages', function (Blueprint $table) {
-            $table->timestamp('next_send_at')->nullable()->after('sent_at');
+            $table->timestamp('next_send_at')->nullable();
         });
     }
 

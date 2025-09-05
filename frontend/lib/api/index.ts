@@ -1,5 +1,5 @@
 import { DeleteParams, GetParams, PatchParams, PostParams, PutParams, Params } from "@/types";
-import createApiInstance from "./createApiInstance";
+import { createApiInstance } from "@/lib/api/createApiInstance";
 
 export const GET = async <T>({ route, params, url, role }: GetParams) => {
   const api = createApiInstance(role);

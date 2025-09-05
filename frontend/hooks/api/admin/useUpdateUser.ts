@@ -11,12 +11,12 @@ interface Response extends MessageResponse {
 
 const useUpdateUser = () => {
   return useMutation({
-    mutationFn: async ({ _id, ...data }: IUser) => {
+    mutationFn: async ({ id, ...data }: IUser) => {
       const response = await PUT<Response>({
         route: PutRoutesWithParams.UpdateUser,
         body: data,
         params: {
-          id: _id!,
+          id: id!,
         },
         role: UserRole.Admin,
       });

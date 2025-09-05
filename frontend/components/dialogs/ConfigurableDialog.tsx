@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { RiDeleteBinLine, RiPencilLine } from "@remixicon/react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -106,7 +107,7 @@ export function ConfigurableDialog({ config, onSubmit, isLoading = false }: Conf
       <DialogTrigger asChild>
         <Button 
           variant={config.triggerVariant || "outline"}
-          icon={config.triggerIcon}
+          icon={<RiPencilLine className="h-4 w-4" />}
         >
           {config.triggerLabel}
         </Button>

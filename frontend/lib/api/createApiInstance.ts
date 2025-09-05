@@ -3,7 +3,7 @@ import createAuthRefreshInterceptor from "axios-auth-refresh";
 import { SERVER_URL } from "@/config";
 import { UserRole } from "@/types";
 import { StatusCode } from "@/types/api";
-import { clearAuthData, getTokenKey } from "../utils";
+import { clearAuthData, getTokenKey, getItemLocalStorage } from "../utils";
 import { PostRoutes } from "@/types/api/PostRoutes";
 
 const createApiInstance = (role: UserRole = UserRole.User): AxiosInstance => {
@@ -18,7 +18,8 @@ const createApiInstance = (role: UserRole = UserRole.User): AxiosInstance => {
   });
 
   api.interceptors.request.use((config) => {
-    const token = localStorage.getItem(tokenKey);
+    const token = getItemLocalStorage(tokenKey);
+    console.log('Request interceptor - Token:', token, 'Key:', tokenKey);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -61,6 +62,8 @@ const createApiInstance = (role: UserRole = UserRole.User): AxiosInstance => {
       const status = error.response?.status;
       const message = error.response?.data?.message || "Unknown error occurred";
 
+      console.log('Response interceptor - Status:', status, 'Message:', message);
+
       if (status === StatusCode.Forbidden) {
         clearAuthData(role, { reason: message });
       }
@@ -72,4 +75,4 @@ const createApiInstance = (role: UserRole = UserRole.User): AxiosInstance => {
   return api;
 };
 
-export default createApiInstance;
+export { createApiInstance };

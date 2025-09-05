@@ -1,7 +1,6 @@
 export enum DeleteRoutes {
-  LogoutUser = "/auth/logout",
-
-  LogoutAdmin = "/admin/auth/logout",
+  DeleteContact = "/whatsapp/contacts/:id",
+  DeleteInstance = "/whatsapp/instances/:id",
 }
 export enum DeleteRoutesWithParams {
   test = "/test/:id",

@@ -72,9 +72,9 @@ const UsersTable = ({
                   </tr>
                 ))
               : users?.map((user) => (
-                  <tr key={user._id}>
+                  <tr key={user.id}>
                     <td className="px-6 py-4">
-                      {editing.userId === user._id ? (
+                      {editing.userId === user.id ? (
                         <Input
                           value={editing.name}
                           onChange={(e) => onInputChange("name", e.target.value)}
@@ -88,7 +88,7 @@ const UsersTable = ({
                     <td className="px-6 py-4">{user.isBlocked ? "Yes" : "No"}</td>
                     <td className="px-6 py-4">{new Date(user.createdAt!).toLocaleDateString()}</td>
                     <td className="px-6 py-4">
-                      {editing.userId === user._id ? (
+                      {editing.userId === user.id ? (
                         <div className="flex space-x-2">
                           <Button variant="ghost" onClick={onSave} disabled={isPending}>
                             Save

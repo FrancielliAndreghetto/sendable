@@ -25,7 +25,7 @@ const RootLayout = ({ children }: WrapperProps) => {
             disableTransitionOnChange
           >
             <Navbar />
-            <main>{children}</main>
+            {children}
             <Toaster />
             <LoadingOverlay />
           </ThemeProvider>

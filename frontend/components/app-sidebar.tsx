@@ -55,27 +55,27 @@ const data = {
       items: [
         {
           title: "Dashboard",
-          url: "/auth/dashboard",
+          url: "/dashboard",
           icon: RiScanLine,
         },
         {
           title: "Api Keys",
-          url: "/auth/apiKeys",
+          url: "/apiKeys",
           icon: RiKey2Line,
         },
         {
           title: "Contatos",
-          url: "#",
+          url: "/contacts",
           icon: RiUserFollowLine,
         },
         {
           title: "Instâncias",
-          url: "#",
+          url: "/instances",
           icon: RiInstanceLine,
         },
         {
           title: "Mensagens",
-          url: "/auth/messages",
+          url: "/messages",
           icon: RiMessage2Line,
         },
       ],

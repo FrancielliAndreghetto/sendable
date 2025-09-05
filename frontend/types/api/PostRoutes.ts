@@ -1,5 +1,5 @@
 export enum PostRoutes {
-  SigninUser = "/auth/signin",
+  SigninUser = "/auth/login",
   SignupUser = "/auth/signup",
   ForgotPasswordUser = "/auth/forgot-password",
   ResetPasswordUser = "/auth/reset-password",
@@ -7,6 +7,8 @@ export enum PostRoutes {
   ResendOtpUser = "/auth/resend-otp",
   UserRefresh = "/auth/refresh",
   OAuthSignIn = "/auth/oauth-2",
+  CreateContact = "/whatsapp/contacts",
+  CreateInstance = "/whatsapp/instances",
 
   AdminSignin = "/admin/auth",
   AdminRefresh = "/admin/auth/refresh",
