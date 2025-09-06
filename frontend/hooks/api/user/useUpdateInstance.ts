@@ -6,7 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface UpdateInstanceData {
   name?: string;
-  phone?: string;
+  number?: string;
   platform?: 'whatsapp' | 'telegram' | 'instagram';
 }
 

@@ -86,7 +86,7 @@ const UsersTable = ({
                     </td>
                     <td className="px-6 py-4">{user.email}</td>
                     <td className="px-6 py-4">{user.isBlocked ? "Yes" : "No"}</td>
-                    <td className="px-6 py-4">{new Date(user.createdAt!).toLocaleDateString()}</td>
+                    <td className="px-6 py-4">{new Date(user.created_at!).toLocaleDateString()}</td>
                     <td className="px-6 py-4">
                       {editing.userId === user.id ? (
                         <div className="flex space-x-2">

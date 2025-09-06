@@ -6,7 +6,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface CreateInstanceData {
   name: string;
-  phone: string;
+  // aceitar ambos para evitar erros de tipagem no frontend
+  phone?: string;
+  number?: string;
+  token?: string | null;
   platform: 'whatsapp' | 'telegram' | 'instagram';
 }
 
@@ -19,9 +22,16 @@ const useCreateInstance = () => {
 
   return useMutation<CreateInstanceResponse, Error, CreateInstanceData>({
     mutationFn: async (data: CreateInstanceData) => {
+      // montar payload enviando explicitamente 'number' (API espera 'number')
+      const payload = {
+        name: data.name,
+        number: data.number ?? data.phone ?? "",
+        token: data.token ?? null,
+        platform: data.platform,
+      };
       const res = await POST<CreateInstanceResponse>({
         route: PostRoutes.CreateInstance,
-        body: data,
+        body: payload,
       });
       return res;
     },

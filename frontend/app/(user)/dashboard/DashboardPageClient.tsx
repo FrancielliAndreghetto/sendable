@@ -151,7 +151,7 @@ export default function Page() {
                     recentMessages.map((message) => (
                       <TableRow key={message.id}>
                         <TableCell className="font-medium">
-                          {message.createdAt ? new Date(message.createdAt).toLocaleString('pt-BR') : '-'}
+                          {message.created_at ? new Date(message.created_at).toLocaleString('pt-BR') : '-'}
                         </TableCell>
                         <TableCell>{message.contact}</TableCell>
                         <TableCell>{message.instance}</TableCell>

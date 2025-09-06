@@ -20,7 +20,7 @@ import LoadingOverlay from "@/components/LoadingOverlay";
 
 export function MessagesContent() {
   const { isLoading, error, createHandler, clearError } = useDialogHandlers();
-  const { data: messagesData, isLoading: isLoadingMessages, error: messagesError } = useGetMessages();
+  const { data: messagesData, isLoading: isLoadingMessages, error: messagesError, refetch: refetchMessages } = useGetMessages();
   
   // Obter configurações dos dialogs
   const messageDialogs = getMessageDialogConfigs();
@@ -30,6 +30,19 @@ export function MessagesContent() {
   const handleCreateScheduledMessage = createHandler(messageAPI.create);
   const handleCreateRecurringMessage = createHandler(messageAPI.create);
   const handleEditMessage = createHandler((data) => messageAPI.update('message-id', data));
+
+  // Deletar mensagem
+  const handleDeleteMessage = async (id?: string) => {
+    if (!id) return;
+    if (!confirm('Deseja realmente deletar esta mensagem?')) return;
+    try {
+      await messageAPI.delete(id);
+      refetchMessages?.();
+    } catch (err) {
+      console.error('Erro ao deletar mensagem:', err);
+      alert('Erro ao deletar mensagem');
+    }
+  };
 
   const getStatusBadgeVariant = (status: string) => {
     switch (status) {
@@ -145,7 +158,7 @@ export function MessagesContent() {
               messages.map((message) => (
                 <TableRow key={message.id}>
                   <TableCell className="font-medium">
-                    {message.createdAt ? new Date(message.createdAt).toLocaleString('pt-BR') : '-'}
+                    {message.created_at ? new Date(message.created_at).toLocaleString('pt-BR') : '-'}
                   </TableCell>
                   <TableCell>{message.contact}</TableCell>
                   <TableCell>{message.instance}</TableCell>
@@ -167,20 +180,24 @@ export function MessagesContent() {
                           ...messageDialogs.edit,
                           triggerLabel: ''
                         }}
-                        onSubmit={handleEditMessage}
+                        onSubmit={async (data) => {
+                          try {
+                            await messageAPI.update(message.id || '', data);
+                            refetchMessages?.();
+                          } catch (err) {
+                            console.error('Erro ao editar mensagem:', err);
+                            alert('Erro ao editar mensagem');
+                          }
+                        }}
                         isLoading={isLoading}
                       />
                       <Button 
                         variant="destructive" 
                         size="sm"
-                        onClick={() => {
-                          if (confirm('Deseja realmente deletar esta mensagem?')) {
-                            createHandler(() => messageAPI.delete(message.id || ''))({});
-                          }
-                        }}
+                        onClick={() => handleDeleteMessage(message.id)}
                         disabled={isLoading}
-                        icon={<RiDeleteBinLine className="h-4 w-4" />}
                       >
+                        <RiDeleteBinLine className="h-4 w-4" />
                       </Button>
                     </div>
                   </TableCell>

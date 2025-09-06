@@ -20,7 +20,7 @@ export interface IUser {
   readonly name?: string;
   readonly email?: string;
   readonly isBlocked?: boolean;
-  readonly createdAt?: DateString;
+  readonly created_at?: DateString;
   readonly profile?: string;
 }
 
@@ -30,18 +30,20 @@ export interface IContact {
   readonly phone: string;
   readonly email?: string;
   readonly tags?: string[];
-  readonly createdAt?: DateString;
-  readonly updatedAt?: DateString;
+  readonly created_at?: DateString;
+  readonly updated_at?: DateString;
 }
 
 export interface IInstance {
   readonly id?: string;
   readonly name: string;
   readonly phone: string;
+  readonly whatsapp_number: string;
+  readonly token: string;
   readonly status: 'connected' | 'disconnected' | 'connecting';
   readonly platform: 'whatsapp' | 'telegram' | 'instagram';
-  readonly createdAt?: DateString;
-  readonly updatedAt?: DateString;
+  readonly created_at?: DateString;
+  readonly updated_at?: DateString;
 }
 
 export interface IMessage {
@@ -53,8 +55,8 @@ export interface IMessage {
   readonly status: 'pending' | 'sent' | 'failed' | 'scheduled';
   readonly scheduledAt?: DateString;
   readonly sentAt?: DateString;
-  readonly createdAt?: DateString;
-  readonly updatedAt?: DateString;
+  readonly created_at?: DateString;
+  readonly updated_at?: DateString;
 }
 
 export interface IApiKey {
@@ -62,6 +64,6 @@ export interface IApiKey {
   readonly name: string;
   readonly key: string;
   readonly status: 'active' | 'inactive';
-  readonly createdAt?: DateString;
-  readonly updatedAt?: DateString;
+  readonly created_at?: DateString;
+  readonly updated_at?: DateString;
 }
