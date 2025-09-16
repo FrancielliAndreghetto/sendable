@@ -1,10 +1,5 @@
 export enum PutRoutes {
-  UpdateProfile = "/profile",
-  UpdateContact = "/whatsapp/contacts/:id",
-  UpdateInstance = "/whatsapp/instances/:id",
-  UpdateApiKey = "/keys/:id",
-}
-
-export enum PutRoutesWithParams {
-  test = "/test/:id",
+  UpdateInstance = "/whatsapp/instances/:instance",
+  UpdateContact = "/whatsapp/contacts/:contact",
+  UpdateApiKey = "/user/api-keys/:id",
 }

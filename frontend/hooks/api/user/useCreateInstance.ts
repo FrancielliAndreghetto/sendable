@@ -6,7 +6,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface CreateInstanceData {
   name: string;
-  // aceitar ambos para evitar erros de tipagem no frontend
   phone?: string;
   number?: string;
   token?: string | null;
@@ -22,7 +21,6 @@ const useCreateInstance = () => {
 
   return useMutation<CreateInstanceResponse, Error, CreateInstanceData>({
     mutationFn: async (data: CreateInstanceData) => {
-      // montar payload enviando explicitamente 'number' (API espera 'number')
       const payload = {
         name: data.name,
         number: data.number ?? data.phone ?? "",

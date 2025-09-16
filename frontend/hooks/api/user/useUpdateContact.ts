@@ -6,9 +6,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface UpdateContactData {
   name?: string;
-  phone?: string;
-  email?: string;
-  tags?: string[];
+  number?: string;
+  instance_id?: string;
+}
+
+interface UpdateContactParams {
+  id: string;
+  data: UpdateContactData;
 }
 
 interface UpdateContactResponse {
@@ -18,14 +22,13 @@ interface UpdateContactResponse {
 const useUpdateContact = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<UpdateContactResponse, Error, { id: string; data: UpdateContactData }>({
-    mutationFn: async ({ id, data }: { id: string; data: UpdateContactData }) => {
-      const res = await PUT<UpdateContactResponse>({
+  return useMutation<UpdateContactResponse, Error, UpdateContactParams>({
+    mutationFn: async ({ id, data }: UpdateContactParams) => {
+      return await PUT<UpdateContactResponse>({
         route: PutRoutes.UpdateContact,
-        params: { id },
+        params: { contact: id },
         body: data,
       });
-      return res;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [GetRoutes.GetContacts] });

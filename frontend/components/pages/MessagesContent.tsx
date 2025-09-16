@@ -46,9 +46,9 @@ export function MessagesContent() {
 
   const getStatusBadgeVariant = (status: string) => {
     switch (status) {
-      case 'sent': return 'default';
-      case 'scheduled': return 'secondary';
-      case 'recurring': return 'outline';
+      case 'sent': return 'destructive';
+      case 'scheduled': return 'destructive';
+      case 'recurring': return 'destructive';
       case 'pending': return 'destructive';
       case 'failed': return 'destructive';
       default: return 'default';
@@ -102,20 +102,8 @@ export function MessagesContent() {
         
         <div className="flex gap-2">
           <ConfigurableDialog 
-            config={messageDialogs.createSimple}
-            onSubmit={handleCreateMessage}
-            isLoading={isLoading}
-          />
-          
-          <ConfigurableDialog 
             config={messageDialogs.createScheduled}
             onSubmit={handleCreateScheduledMessage}
-            isLoading={isLoading}
-          />
-          
-          <ConfigurableDialog 
-            config={messageDialogs.createRecurring}
-            onSubmit={handleCreateRecurringMessage}
             isLoading={isLoading}
           />
         </div>

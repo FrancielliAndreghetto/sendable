@@ -9,9 +9,8 @@ import useDeleteInstance from "@/hooks/api/user/useDeleteInstance";
 import useUpdateInstance from "@/hooks/api/user/useUpdateInstance";
 import useCreateInstance from "@/hooks/api/user/useCreateInstance";
 import { useState } from "react";
-import { IInstance } from "@/types";
-import axios from "axios";
-import { Tokens } from "@/types";
+import { IInstance } from "@/types"; 
+import CustomInput from "@/components/forms/elements/CustomInput";
 
 export function InstancesContent() {
   const { data, isLoading, error, refetch } = useGetInstances();
@@ -177,15 +176,29 @@ export function InstancesContent() {
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm" onClick={() => setCreateOpen(false)} />
           <div className="relative z-50 w-full max-w-md p-6">
-            <div className=" dark:text-slate-100 rounded-lg shadow-xl overflow-hidden">
+            <div className="bg-background dark:text-slate-100 rounded-lg shadow-xl overflow-hidden">
               <div className="p-6">
-                <h3 className="text-lg font-semibold mb-4">Criar Instância</h3>
-                <label className="block text-sm mb-2">Nome</label>
-                <input className="w-full border rounded px-3 py-2 mb-3 bg-transparent text-inherit" value={nameField} onChange={(e) => setNameField(e.target.value)} />
-                <label className="block text-sm mb-2">Número</label>
-                <input className="w-full border rounded px-3 py-2 mb-3 bg-transparent text-inherit" value={numberField} onChange={(e) => setNumberField(e.target.value)} />
-                <label className="block text-sm mb-2">Token (opcional)</label>
-                <input className="w-full border rounded px-3 py-2 mb-4 bg-transparent text-inherit" value={tokenField} onChange={(e) => setTokenField(e.target.value)} />
+                <h3 className="text-lg font-semibold">Criar Instância</h3>
+                <div className="space-y-4 my-6">
+                  <CustomInput
+                    label="Nome"
+                    value={nameField}
+                    onChange={(e) => setNameField(e.target.value)}
+                    placeholder="Nome da instância"
+                  />
+                  <CustomInput
+                    label="Número"
+                    value={numberField}
+                    onChange={(e) => setNumberField(e.target.value)}
+                    placeholder="Número de telefone"
+                  />
+                  <CustomInput
+                    label="Token (opcional)"
+                    value={tokenField}
+                    onChange={(e) => setTokenField(e.target.value)}
+                    placeholder="Token de acesso"
+                  />
+                </div>
                 <div className="flex justify-end gap-2">
                   <Button variant="ghost" onClick={() => setCreateOpen(false)}>Cancelar</Button>
                   <Button onClick={submitCreate} disabled={isCreating}>{isCreating ? "Criando..." : "Criar"}</Button>
@@ -201,13 +214,23 @@ export function InstancesContent() {
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm" onClick={() => setEditOpen(false)} />
           <div className="relative z-50 w-full max-w-md p-6">
-            <div className="dark:text-slate-100 rounded-lg shadow-xl overflow-hidden">
+            <div className="bg-background dark:text-slate-100 rounded-lg shadow-xl overflow-hidden">
               <div className="p-6">
-                <h3 className="text-lg font-semibold mb-4">Editar Instância</h3>
-                <label className="block text-sm mb-2">Nome</label>
-                <input className="w-full border rounded px-3 py-2 mb-3 bg-transparent text-inherit" value={nameField} onChange={(e) => setNameField(e.target.value)} />
-                <label className="block text-sm mb-2">Número</label>
-                <input className="w-full border rounded px-3 py-2 mb-4 bg-transparent text-inherit" value={numberField} onChange={(e) => setNumberField(e.target.value)} />
+                <h3 className="text-lg font-semibold">Editar Instância</h3>
+                <div className="space-y-4 my-6">
+                  <CustomInput
+                    label="Nome"
+                    value={nameField}
+                    onChange={(e) => setNameField(e.target.value)}
+                    placeholder="Nome da instância"
+                  />
+                  <CustomInput
+                    label="Número"
+                    value={numberField}
+                    onChange={(e) => setNumberField(e.target.value)}
+                    placeholder="Número de telefone"
+                  />
+                </div>
                 <div className="flex justify-end gap-2">
                   <Button variant="ghost" onClick={() => { setEditOpen(false); setSelectedInstance(null); }}>Cancelar</Button>
                   <Button onClick={submitEdit} disabled={isUpdating}>{isUpdating ? "Salvando..." : "Salvar"}</Button>
@@ -223,7 +246,7 @@ export function InstancesContent() {
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm" onClick={() => setDeleteOpen(false)} />
           <div className="relative z-50 w-full max-w-sm p-6">
-            <div className="bg-white dark:bg-slate-900 dark:text-slate-100 rounded-lg shadow-xl overflow-hidden">
+            <div className="bg-background dark:text-slate-100 rounded-lg shadow-xl overflow-hidden">
               <div className="p-6">
                 <h3 className="text-lg font-semibold mb-2">Deletar Instância</h3>
                 <p className="text-sm text-muted-foreground mb-4">Deseja realmente deletar a instância "<strong>{selectedInstance.name}</strong>"? Esta ação não pode ser desfeita.</p>
@@ -248,8 +271,8 @@ export function InstancesContent() {
               <TableRow>
                 <TableHead>Nome</TableHead>
                 <TableHead>Número</TableHead>
-                <TableHead>Plataforma</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead>Criado em</TableHead>
                 <TableHead className="text-right">Ações</TableHead>
               </TableRow>
             </TableHeader>
@@ -257,13 +280,13 @@ export function InstancesContent() {
               {instances.map((instance) => (
                 <TableRow key={instance.id}>
                   <TableCell className="font-medium">{instance.name}</TableCell>
-                  <TableCell>{instance.phone}</TableCell>
-                  <TableCell>{getPlatformLabel(instance.platform)}</TableCell>
+                  <TableCell>{instance.number}</TableCell>
                   <TableCell>
-                    <Badge variant={getStatusVariant(instance.status)}>
-                      {getStatusLabel(instance.status)}
+                    <Badge variant={getStatusVariant(instance.is_active ? 'connected' : 'disconnected')}>
+                      {getStatusLabel(instance.is_active ? 'connected' : 'disconnected')}
                     </Badge>
                   </TableCell>
+                  <TableCell>{instance.created_at ? new Date(instance.created_at).toLocaleDateString("pt-BR") : "-"}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex gap-2 justify-end">
                       <Button 
@@ -293,4 +316,3 @@ export function InstancesContent() {
     </div>
   );
 }
-

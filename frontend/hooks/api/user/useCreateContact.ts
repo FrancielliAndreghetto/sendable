@@ -6,9 +6,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface CreateContactData {
   name: string;
-  phone: string;
-  email?: string;
-  tags?: string[];
+  number: string;
+  instance_id?: string;
 }
 
 interface CreateContactResponse {

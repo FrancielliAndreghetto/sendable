@@ -27,9 +27,9 @@ export interface IUser {
 export interface IContact {
   readonly id?: string;
   readonly name: string;
-  readonly phone: string;
-  readonly email?: string;
-  readonly tags?: string[];
+  readonly number: string;
+  readonly instance_id?: string;
+  readonly instance?: IInstance;
   readonly created_at?: DateString;
   readonly updated_at?: DateString;
 }
@@ -38,9 +38,9 @@ export interface IInstance {
   readonly id?: string;
   readonly name: string;
   readonly phone: string;
-  readonly whatsapp_number: string;
+  readonly number: string;
   readonly token: string;
-  readonly status: 'connected' | 'disconnected' | 'connecting';
+  readonly is_active: boolean;
   readonly platform: 'whatsapp' | 'telegram' | 'instagram';
   readonly created_at?: DateString;
   readonly updated_at?: DateString;
