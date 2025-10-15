@@ -20,4 +20,9 @@ class CreateWhatsappContactDTO extends BaseDTO
         $this->image = $data['image'] ?? null;
         $this->partner_id = $partnerId;
     }
+
+    public function toArray(): array
+    {
+        return $this->toArrayFiltered();
+    }
 }

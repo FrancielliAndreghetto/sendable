@@ -20,4 +20,9 @@ class CreateApiKeyDTO extends BaseDTO
         $this->scopes = $data['scopes'] ?? null;
         $this->expires_at = $data['expires_at'] ?? null;
     }
+
+    public function toArray(): array
+    {
+        return $this->toArrayFiltered();
+    }
 }

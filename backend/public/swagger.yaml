@@ -5,7 +5,7 @@ info:
   description: API para autenticação, gerenciamento de API Keys e instâncias e envios de mensagens
 
 servers:
-  - url: http://localhost:8000/api
+  - url: http://localhost:8080/api
 
 components:
   securitySchemes:
@@ -55,7 +55,7 @@ paths:
                   format: password
                   example: senha123
       responses:
-        '200':
+        "200":
           description: Autenticado com sucesso, retorna usuário e token
           content:
             application/json:
@@ -86,7 +86,7 @@ paths:
                       token:
                         type: string
                         example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
-        '401':
+        "401":
           description: Credenciais inválidas
           content:
             application/json:
@@ -99,7 +99,7 @@ paths:
                   message:
                     type: string
                     example: Credenciais inválidas.
-        '429':
+        "429":
           description: Muitas tentativas, bloqueio temporário
           content:
             application/json:
@@ -112,7 +112,7 @@ paths:
                   message:
                     type: string
                     example: Muitas tentativas, aguarde um momento antes de tentar novamente.
-        '500':
+        "500":
           description: Erro interno do servidor
           content:
             application/json:
@@ -157,7 +157,7 @@ paths:
                   nullable: true
                   example: "2025-12-31T23:59:59Z"
       responses:
-        '201':
+        "201":
           description: Api Key criada com sucesso
           content:
             application/json:
@@ -206,7 +206,7 @@ paths:
                         type: string
                         format: date-time
                         example: "2025-07-28T14:32:00Z"
-        '500':
+        "500":
           description: Falha ao criar Api Key
           content:
             application/json:
@@ -224,7 +224,7 @@ paths:
         - Api Keys
       summary: Listar todas as API Keys
       responses:
-        '200':
+        "200":
           description: Lista de Api Keys
           content:
             application/json:
@@ -298,7 +298,7 @@ paths:
                         type: string
                         nullable: true
                         example: null
-        '401':
+        "401":
           description: Não autorizado
           content:
             application/json:
@@ -311,7 +311,7 @@ paths:
                   message:
                     type: string
                     example: Não autorizado.
-        '500':
+        "500":
           description: Erro interno
           content:
             application/json:
@@ -330,7 +330,7 @@ paths:
         - Api Keys
       summary: Buscar dados da Api Key
       responses:
-        '200':
+        "200":
           description: Buscar dados da Api Key
           content:
             application/json:
@@ -379,7 +379,7 @@ paths:
                         type: string
                         format: date-time
                         example: "2025-07-28T14:32:00Z"
-        '401':
+        "401":
           description: Não autorizado
           content:
             application/json:
@@ -392,7 +392,7 @@ paths:
                   message:
                     type: string
                     example: Não autorizado.
-        '404':
+        "404":
           description: Api Key não foi encontrada
           content:
             application/json:
@@ -405,7 +405,7 @@ paths:
                   message:
                     type: string
                     example: Api Key não foi encontrada.
-        '500':
+        "500":
           description: Erro interno
           content:
             application/json:
@@ -460,7 +460,7 @@ paths:
                   example: "2025-12-31T23:59:59Z"
                   description: Data e hora de expiração da API Key (opcional)
       responses:
-        '200':
+        "200":
           description: Api Key atualizada com sucesso
           content:
             application/json:
@@ -510,7 +510,7 @@ paths:
                         type: string
                         format: date-time
                         example: "2025-08-01T10:20:00Z"
-        '400':
+        "400":
           description: Requisição inválida ou erro na atualização
           content:
             application/json:
@@ -523,7 +523,7 @@ paths:
                   message:
                     type: string
                     example: Api Key não foi encontrada ou dados inválidos.
-        '401':
+        "401":
           description: Não autorizado
           content:
             application/json:
@@ -536,7 +536,7 @@ paths:
                   message:
                     type: string
                     example: Não autorizado.
-        '500':
+        "500":
           description: Erro interno do servidor
           content:
             application/json:
@@ -562,7 +562,7 @@ paths:
             format: uuid
           description: UUID da API Key a ser deletada
       responses:
-        '200':
+        "200":
           description: Api Key deletada com sucesso
           content:
             application/json:
@@ -575,7 +575,7 @@ paths:
                   message:
                     type: string
                     example: Api Key deletada com sucesso.
-        '404':
+        "404":
           description: Api Key não foi encontrada
           content:
             application/json:
@@ -588,7 +588,7 @@ paths:
                   message:
                     type: string
                     example: Api Key não foi encontrada.
-        '401':
+        "401":
           description: Não autorizado
           content:
             application/json:
@@ -601,7 +601,7 @@ paths:
                   message:
                     type: string
                     example: Não autorizado.
-        '500':
+        "500":
           description: Erro interno
           content:
             application/json:
@@ -643,7 +643,7 @@ paths:
                   nullable: true
                   example: "token_opcional"
       responses:
-        '201':
+        "201":
           description: Instância criada com sucesso
           content:
             application/json:
@@ -709,7 +709,7 @@ paths:
                         type: string
                         format: date-time
                         example: "2025-07-18T02:52:05.000000Z"
-        '400':
+        "400":
           description: Dados inválidos
           content:
             application/json:
@@ -722,7 +722,7 @@ paths:
                   message:
                     type: string
                     example: Dados inválidos.
-        '500':
+        "500":
           description: Falha ao criar instância
           content:
             application/json:
@@ -740,7 +740,7 @@ paths:
         - Whatsapp - Instâncias
       summary: Listar instâncias WhatsApp
       responses:
-        '200':
+        "200":
           description: Lista paginada de instâncias
           content:
             application/json:
@@ -831,7 +831,7 @@ paths:
                         type: string
                         nullable: true
                         example: null
-        '401':
+        "401":
           description: Não autorizado
           content:
             application/json:
@@ -844,7 +844,7 @@ paths:
                   message:
                     type: string
                     example: Não autorizado.
-        '500':
+        "500":
           description: Erro interno
           content:
             application/json:
@@ -871,7 +871,7 @@ paths:
             format: uuid
           description: UUID da instância WhatsApp
       responses:
-        '200':
+        "200":
           description: Instância deletada com sucesso
           content:
             application/json:
@@ -884,7 +884,7 @@ paths:
                   message:
                     type: string
                     example: Instância deletada com sucesso.
-        '404':
+        "404":
           description: Instância não encontrada
           content:
             application/json:
@@ -897,7 +897,7 @@ paths:
                   message:
                     type: string
                     example: Nenhuma instância encontrada com o UUID fornecido.
-        '401':
+        "401":
           description: Não autorizado
           content:
             application/json:
@@ -910,7 +910,7 @@ paths:
                   message:
                     type: string
                     example: Não autorizado.
-        '500':
+        "500":
           description: Erro interno
           content:
             application/json:
@@ -937,7 +937,7 @@ paths:
             format: uuid
           description: UUID da instância WhatsApp
       responses:
-        '200':
+        "200":
           description: QRCode gerado com sucesso
           content:
             application/json:
@@ -954,7 +954,7 @@ paths:
                     type: string
                     description: QRCode em base64
                     example: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA..."
-        '404':
+        "404":
           description: Instância WhatsApp não encontrada
           content:
             application/json:
@@ -967,7 +967,7 @@ paths:
                   message:
                     type: string
                     example: Nenhuma instância encontrada com o UUID fornecido.
-        '401':
+        "401":
           description: Não autorizado
           content:
             application/json:
@@ -980,7 +980,7 @@ paths:
                   message:
                     type: string
                     example: Não autorizado.
-        '500':
+        "500":
           description: Erro interno
           content:
             application/json:
@@ -1007,7 +1007,7 @@ paths:
             format: uuid
           description: UUID da instância WhatsApp
       responses:
-        '200':
+        "200":
           description: Instância desconectada com sucesso
           content:
             application/json:
@@ -1020,7 +1020,7 @@ paths:
                   message:
                     type: string
                     example: Instância desconectada com sucesso.
-        '404':
+        "404":
           description: Instância não encontrada
           content:
             application/json:
@@ -1033,7 +1033,7 @@ paths:
                   message:
                     type: string
                     example: Nenhuma instância encontrada com o UUID fornecido.
-        '401':
+        "401":
           description: Não autorizado
           content:
             application/json:
@@ -1046,7 +1046,7 @@ paths:
                   message:
                     type: string
                     example: Não autorizado.
-        '500':
+        "500":
           description: Erro interno
           content:
             application/json:
@@ -1073,7 +1073,7 @@ paths:
             format: uuid
           description: UUID da instância WhatsApp
       responses:
-        '200':
+        "200":
           description: QRCode para reconexão gerado com sucesso
           content:
             application/json:
@@ -1090,7 +1090,7 @@ paths:
                     type: string
                     description: QRCode em base64
                     example: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA..."
-        '404':
+        "404":
           description: Instância não encontrada
           content:
             application/json:
@@ -1103,7 +1103,7 @@ paths:
                   message:
                     type: string
                     example: Nenhuma instância encontrada com o UUID fornecido.
-        '401':
+        "401":
           description: Não autorizado
           content:
             application/json:
@@ -1116,7 +1116,7 @@ paths:
                   message:
                     type: string
                     example: Não autorizado.
-        '500':
+        "500":
           description: Erro interno
           content:
             application/json:
@@ -1145,7 +1145,7 @@ paths:
             format: uuid
           description: UUID da instância WhatsApp
       responses:
-        '200':
+        "200":
           description: Sincronização iniciada com sucesso
           content:
             application/json:
@@ -1162,7 +1162,7 @@ paths:
                     type: object
                     nullable: true
                     example: null
-        '404':
+        "404":
           description: Instância não encontrada
           content:
             application/json:
@@ -1175,7 +1175,7 @@ paths:
                   message:
                     type: string
                     example: Nenhuma instância encontrada com o UUID fornecido.
-        '401':
+        "401":
           description: Não autorizado
           content:
             application/json:
@@ -1188,7 +1188,7 @@ paths:
                   message:
                     type: string
                     example: Não autorizado.
-        '500':
+        "500":
           description: Erro interno
           content:
             application/json:
@@ -1241,7 +1241,7 @@ paths:
                       summary: Imagem em base64
                       value: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
       responses:
-        '201':
+        "201":
           description: Contato criado com sucesso
           content:
             application/json:
@@ -1284,7 +1284,7 @@ paths:
                         type: string
                         format: date-time
                         example: "2025-07-28T14:32:00Z"
-        '500':
+        "500":
           description: Falha ao criar Contato
           content:
             application/json:
@@ -1302,7 +1302,7 @@ paths:
         - Whatsapp - Contatos
       summary: Listar todas os Contatos
       responses:
-        '200':
+        "200":
           description: Lista de ontatos
           content:
             application/json:
@@ -1370,7 +1370,7 @@ paths:
                         type: string
                         nullable: true
                         example: null
-        '401':
+        "401":
           description: Não autorizado
           content:
             application/json:
@@ -1383,7 +1383,7 @@ paths:
                   message:
                     type: string
                     example: Não autorizado.
-        '500':
+        "500":
           description: Erro interno
           content:
             application/json:
@@ -1402,7 +1402,7 @@ paths:
         - Whatsapp - Contatos
       summary: Buscar dados do Contato
       responses:
-        '200':
+        "200":
           description: Buscar dados do Contato
           content:
             application/json:
@@ -1445,7 +1445,7 @@ paths:
                         type: string
                         format: date-time
                         example: "2025-07-28T14:32:00Z"
-        '401':
+        "401":
           description: Não autorizado
           content:
             application/json:
@@ -1458,7 +1458,7 @@ paths:
                   message:
                     type: string
                     example: Não autorizado.
-        '404':
+        "404":
           description: Contato não foi encontrado
           content:
             application/json:
@@ -1471,7 +1471,7 @@ paths:
                   message:
                     type: string
                     example: Contato não foi encontrado.
-        '500':
+        "500":
           description: Erro interno
           content:
             application/json:
@@ -1527,7 +1527,7 @@ paths:
                       summary: Imagem em base64
                       value: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
       responses:
-        '200':
+        "200":
           description: Contato atualizado com sucesso
           content:
             application/json:
@@ -1570,7 +1570,7 @@ paths:
                         type: string
                         format: date-time
                         example: "2025-07-28T14:32:00Z"
-        '400':
+        "400":
           description: Requisição inválida ou erro na atualização
           content:
             application/json:
@@ -1583,7 +1583,7 @@ paths:
                   message:
                     type: string
                     example: Contato não foi encontrado ou dados inválidos.
-        '401':
+        "401":
           description: Não autorizado
           content:
             application/json:
@@ -1596,7 +1596,7 @@ paths:
                   message:
                     type: string
                     example: Não autorizado.
-        '500':
+        "500":
           description: Erro interno do servidor
           content:
             application/json:
@@ -1622,7 +1622,7 @@ paths:
             format: uuid
           description: UUID do Contato a ser deletado
       responses:
-        '200':
+        "200":
           description: Contato deletado com sucesso
           content:
             application/json:
@@ -1635,7 +1635,7 @@ paths:
                   message:
                     type: string
                     example: Contato deletado com sucesso.
-        '404':
+        "404":
           description: Contato não foi encontrado
           content:
             application/json:
@@ -1648,7 +1648,7 @@ paths:
                   message:
                     type: string
                     example: Contato não foi encontrado.
-        '401':
+        "401":
           description: Não autorizado
           content:
             application/json:
@@ -1661,7 +1661,7 @@ paths:
                   message:
                     type: string
                     example: Não autorizado.
-        '500':
+        "500":
           description: Erro interno
           content:
             application/json:
@@ -1697,7 +1697,7 @@ paths:
             minimum: 1
           description: Número da página
       responses:
-        '200':
+        "200":
           description: Lista paginada de mensagens
           content:
             application/json:
@@ -1732,13 +1732,14 @@ paths:
                           items:
                             type: string
                             format: uuid
-                          example: ["123e4567-e89b-12d3-a456-426614174001", "123e4567-e89b-12d3-a456-426614174002"]
+                          example:
+                            [
+                              "123e4567-e89b-12d3-a456-426614174001",
+                              "123e4567-e89b-12d3-a456-426614174002",
+                            ]
                         name:
                           type: string
                           example: João Silva
-                        number:
-                          type: string
-                          example: "5511999999999"
                         message:
                           type: string
                           example: Olá! Esta é uma mensagem de teste.
@@ -1820,7 +1821,7 @@ paths:
                         type: string
                         nullable: true
                         example: null
-        '401':
+        "401":
           description: Não autorizado
           content:
             application/json:
@@ -1833,7 +1834,7 @@ paths:
                   message:
                     type: string
                     example: Não autorizado.
-        '500':
+        "500":
           description: Erro interno
           content:
             application/json:
@@ -1872,13 +1873,12 @@ paths:
                     type: string
                     format: uuid
                   nullable: true
-                  example: ["123e4567-e89b-12d3-a456-426614174001", "123e4567-e89b-12d3-a456-426614174002"]
+                  example:
+                    [
+                      "123e4567-e89b-12d3-a456-426614174001",
+                      "123e4567-e89b-12d3-a456-426614174002",
+                    ]
                   description: Array de UUIDs dos contatos
-                number:
-                  type: string
-                  nullable: true
-                  example: "5511999999999"
-                  description: Número de telefone (opcional se contact_id for fornecido)
                 name:
                   type: string
                   example: João Silva
@@ -1916,7 +1916,7 @@ paths:
                   example: 2
                   description: "Intervalo de recorrência (ex: 2 para (a cada 2 semanas))"
       responses:
-        '201':
+        "201":
           description: Mensagem criada com sucesso
           content:
             application/json:
@@ -1949,13 +1949,14 @@ paths:
                         items:
                           type: string
                           format: uuid
-                        example: ["123e4567-e89b-12d3-a456-426614174001", "123e4567-e89b-12d3-a456-426614174002"]
+                        example:
+                          [
+                            "123e4567-e89b-12d3-a456-426614174001",
+                            "123e4567-e89b-12d3-a456-426614174002",
+                          ]
                       name:
                         type: string
                         example: João Silva
-                      number:
-                        type: string
-                        example: "5511999999999"
                       message:
                         type: string
                         example: Olá! Esta é uma mensagem de teste.
@@ -1993,7 +1994,7 @@ paths:
                         type: string
                         format: date-time
                         example: "2024-01-01T10:00:00.000000Z"
-        '400':
+        "400":
           description: Dados inválidos
           content:
             application/json:
@@ -2006,7 +2007,7 @@ paths:
                   message:
                     type: string
                     example: Dados inválidos.
-        '500':
+        "500":
           description: Falha ao criar mensagem
           content:
             application/json:
@@ -2033,7 +2034,7 @@ paths:
             format: uuid
           description: UUID da mensagem
       responses:
-        '200':
+        "200":
           description: Mensagem encontrada com sucesso
           content:
             application/json:
@@ -2066,13 +2067,14 @@ paths:
                         items:
                           type: string
                           format: uuid
-                        example: ["123e4567-e89b-12d3-a456-426614174001", "123e4567-e89b-12d3-a456-426614174002"]
+                        example:
+                          [
+                            "123e4567-e89b-12d3-a456-426614174001",
+                            "123e4567-e89b-12d3-a456-426614174002",
+                          ]
                       name:
                         type: string
                         example: João Silva
-                      number:
-                        type: string
-                        example: "5511999999999"
                       message:
                         type: string
                         example: Olá! Esta é uma mensagem de teste.
@@ -2109,7 +2111,7 @@ paths:
                         type: string
                         format: date-time
                         example: "2024-01-01T10:00:00.000000Z"
-        '404':
+        "404":
           description: Mensagem não encontrada
           content:
             application/json:
@@ -2122,7 +2124,7 @@ paths:
                   message:
                     type: string
                     example: Mensagem não encontrada.
-        '401':
+        "401":
           description: Não autorizado
           content:
             application/json:
@@ -2135,7 +2137,7 @@ paths:
                   message:
                     type: string
                     example: Não autorizado.
-        '500':
+        "500":
           description: Erro interno
           content:
             application/json:
@@ -2179,13 +2181,12 @@ paths:
                     type: string
                     format: uuid
                   nullable: true
-                  example: ["123e4567-e89b-12d3-a456-426614174001", "123e4567-e89b-12d3-a456-426614174002"]
+                  example:
+                    [
+                      "123e4567-e89b-12d3-a456-426614174001",
+                      "123e4567-e89b-12d3-a456-426614174002",
+                    ]
                   description: Array de UUIDs dos contatos
-                number:
-                  type: string
-                  nullable: true
-                  example: "5511999999999"
-                  description: Número de telefone
                 name:
                   type: string
                   nullable: true
@@ -2231,7 +2232,7 @@ paths:
                   example: 3
                   description: "Intervalo de recorrência (ex: 3 para a cada 3 meses)"
       responses:
-        '200':
+        "200":
           description: Mensagem atualizada com sucesso
           content:
             application/json:
@@ -2264,13 +2265,14 @@ paths:
                         items:
                           type: string
                           format: uuid
-                        example: ["123e4567-e89b-12d3-a456-426614174001", "123e4567-e89b-12d3-a456-426614174002"]
+                        example:
+                          [
+                            "123e4567-e89b-12d3-a456-426614174001",
+                            "123e4567-e89b-12d3-a456-426614174002",
+                          ]
                       name:
                         type: string
                         example: João Silva Atualizado
-                      number:
-                        type: string
-                        example: "5511999999999"
                       message:
                         type: string
                         example: Olá! Esta é uma mensagem atualizada.
@@ -2307,7 +2309,7 @@ paths:
                         type: string
                         format: date-time
                         example: "2024-01-01T11:00:00.000000Z"
-        '404':
+        "404":
           description: Mensagem não encontrada
           content:
             application/json:
@@ -2320,7 +2322,7 @@ paths:
                   message:
                     type: string
                     example: Mensagem não encontrada.
-        '400':
+        "400":
           description: Dados inválidos
           content:
             application/json:
@@ -2333,7 +2335,7 @@ paths:
                   message:
                     type: string
                     example: Dados inválidos.
-        '401':
+        "401":
           description: Não autorizado
           content:
             application/json:
@@ -2346,7 +2348,7 @@ paths:
                   message:
                     type: string
                     example: Não autorizado.
-        '500':
+        "500":
           description: Erro interno
           content:
             application/json:
@@ -2372,7 +2374,7 @@ paths:
             format: uuid
           description: UUID da mensagem a ser deletada
       responses:
-        '200':
+        "200":
           description: Mensagem deletada com sucesso
           content:
             application/json:
@@ -2385,7 +2387,7 @@ paths:
                   message:
                     type: string
                     example: Mensagem deletada com sucesso.
-        '404':
+        "404":
           description: Mensagem não encontrada
           content:
             application/json:
@@ -2398,7 +2400,7 @@ paths:
                   message:
                     type: string
                     example: Mensagem não encontrada.
-        '401':
+        "401":
           description: Não autorizado
           content:
             application/json:
@@ -2411,7 +2413,7 @@ paths:
                   message:
                     type: string
                     example: Não autorizado.
-        '500':
+        "500":
           description: Erro interno
           content:
             application/json:

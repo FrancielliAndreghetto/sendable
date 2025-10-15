@@ -14,4 +14,9 @@ class AuthenticateUserDTO extends BaseDTO
         $this->email = $data['email'];
         $this->password = $data['password'];
     }
+
+    public function toArray(): array
+    {
+        return $this->toArrayFiltered();
+    }
 }

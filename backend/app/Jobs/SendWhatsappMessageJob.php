@@ -36,12 +36,12 @@ class SendWhatsappMessageJob implements ShouldQueue
             return;
         }
 
-        $this->processMessageSending($message, $whatsappMessageService);
+        $this->processMessageContacts($message, $whatsappMessageService);
     }
 
     private function findMessage(): ?WhatsappMessage
     {
-        return WhatsappMessage::find($this->messageId);
+        return WhatsappMessage::with(['contacts', 'instance', 'messageContacts'])->find($this->messageId);
     }
 
     private function isValidMessage(?WhatsappMessage $message): bool
@@ -61,113 +61,148 @@ class SendWhatsappMessageJob implements ShouldQueue
         ]);
     }
 
-    private function processMessageSending(WhatsappMessage $message, WhatsappMessageServiceInterface $service): void
+    private function processMessageContacts(WhatsappMessage $message, WhatsappMessageServiceInterface $service): void
+    {
+        $pendingContacts = $this->getPendingContacts($message);
+
+        if ($pendingContacts->isEmpty()) {
+            Log::info('No pending contacts for message', ['message_id' => $message->id]);
+            return;
+        }
+
+        foreach ($pendingContacts as $messageContact) {
+            $this->processContactMessage($message, $messageContact, $service);
+        }
+
+        $this->updateMessageStatus($message);
+        $this->scheduleRecurrenceIfNeeded($message);
+    }
+
+    private function getPendingContacts(WhatsappMessage $message)
+    {
+        return $message->messageContacts()
+            ->with('contact')
+            ->where('status_id', 0)
+            ->get();
+    }
+
+    private function processContactMessage(WhatsappMessage $message, $messageContact, WhatsappMessageServiceInterface $service): void
     {
         try {
-            $result = $this->sendMessage($message, $service);
+            $result = $this->sendMessageToContact($message, $messageContact, $service);
 
-            if (!$result['success']) {
-                $this->handleFailedSend($message, $result['message'] ?? 'Falha no envio da mensagem');
-                return;
+            if ($result['success']) {
+                $this->handleSuccessfulContactSend($messageContact);
+            } else {
+                $this->handleFailedContactSend($messageContact, $result['message'] ?? 'Falha no envio');
             }
-
-            $this->handleSuccessfulSend($message);
         } catch (\Exception $e) {
-            $this->handleFailedSend($message, $e->getMessage());
+            $this->handleFailedContactSend($messageContact, $e->getMessage());
         }
     }
 
-    private function sendMessage(WhatsappMessage $message, WhatsappMessageServiceInterface $service): array
+    private function sendMessageToContact(WhatsappMessage $message, $messageContact, WhatsappMessageServiceInterface $service): array
     {
-        if (!$this->validateMessageForSending($message)) {
-            throw new \Exception('Mensagem inválida para envio');
+        $contact = $messageContact->contact;
+
+        if (!$contact) {
+            throw new \Exception('Contato não encontrado');
+        }
+
+        if (!$this->validateContactForSending($contact)) {
+            throw new \Exception('Contato inválido para envio');
         }
 
         $instanceName = $this->getInstanceName($message);
 
-        Log::info("Enviando mensagem para {$message->number}", [
+        Log::info("Enviando mensagem para contato", [
             'message_id' => $message->id,
+            'contact_id' => $contact->id,
+            'contact_number' => $contact->number,
             'instance' => $instanceName
         ]);
 
         return $service->sendMessage(
             $message->message,
-            $message->number,
+            $contact->number,
             $instanceName
         );
     }
 
-    private function validateMessageForSending(WhatsappMessage $message): bool
+    private function validateContactForSending($contact): bool
     {
-        return !empty($message->message) &&
-            !empty($message->number) &&
-            !empty($message->instance_id);
+        return $contact && !empty($contact->number);
+    }
+
+    private function handleSuccessfulContactSend($messageContact): void
+    {
+        $messageContact->update([
+            'status_id' => self::STATUS_SENT,
+            'delivery_status' => self::DELIVERY_STATUS_SENT,
+            'error_message' => null,
+            'sent_at' => now()
+        ]);
+
+        Log::info('Message sent successfully to contact', [
+            'message_id' => $messageContact->message_id,
+            'contact_id' => $messageContact->contact_id
+        ]);
+    }
+
+    private function handleFailedContactSend($messageContact, string $error): void
+    {
+        $messageContact->update([
+            'status_id' => self::STATUS_FAILED,
+            'delivery_status' => self::DELIVERY_STATUS_FAILED,
+            'error_message' => $error,
+            'sent_at' => null
+        ]);
+
+        Log::error('Failed to send message to contact', [
+            'message_id' => $messageContact->message_id,
+            'contact_id' => $messageContact->contact_id,
+            'error' => $error
+        ]);
+    }
+
+    private function updateMessageStatus(WhatsappMessage $message): void
+    {
+        $totalContacts = $message->messageContacts()->count();
+        $sentContacts = $message->messageContacts()->where('status_id', self::STATUS_SENT)->count();
+        $failedContacts = $message->messageContacts()->where('status_id', self::STATUS_FAILED)->count();
+
+        if ($sentContacts + $failedContacts >= $totalContacts) {
+            $overallStatus = $sentContacts > 0 ? self::STATUS_SENT : self::STATUS_FAILED;
+            $overallDeliveryStatus = $sentContacts > 0 ? self::DELIVERY_STATUS_SENT : self::DELIVERY_STATUS_FAILED;
+
+            $message->update([
+                'status_id' => $overallStatus,
+                'delivery_status' => $overallDeliveryStatus
+            ]);
+        }
+    }
+
+    private function scheduleRecurrenceIfNeeded(WhatsappMessage $message): void
+    {
+        if (!$this->hasRecurrence($message)) {
+            return;
+        }
+
+        $nextSendAt = $this->calculateNextSendDate($message);
+
+        $message->update(['next_send_at' => $nextSendAt]);
+
+        $message->messageContacts()->update([
+            'status_id' => 0,
+            'delivery_status' => null,
+            'error_message' => null,
+            'sent_at' => null
+        ]);
     }
 
     private function getInstanceName(WhatsappMessage $message): string
     {
         return $message->instance->external_name ?? $message->instance->id;
-    }
-
-    private function handleSuccessfulSend(WhatsappMessage $message): void
-    {
-        $updateData = $this->buildSuccessUpdateData($message);
-
-        $message->update($updateData);
-
-        $this->logSuccessfulSend($message);
-    }
-
-    private function buildSuccessUpdateData(WhatsappMessage $message): array
-    {
-        $updateData = [
-            'status_id' => self::STATUS_SENT,
-            'delivery_status' => self::DELIVERY_STATUS_SENT,
-            'error_message' => null
-        ];
-
-        if ($this->hasRecurrence($message)) {
-            $updateData['next_send_at'] = $this->calculateNextSendDate($message);
-        } else {
-            $updateData['next_send_at'] = null; // Não há próximo envio
-        }
-
-        return $updateData;
-    }
-
-    private function logSuccessfulSend(WhatsappMessage $message): void
-    {
-        Log::info('WhatsApp message sent successfully', [
-            'message_id' => $message->id,
-            'number' => $message->number
-        ]);
-    }
-
-    private function handleFailedSend(WhatsappMessage $message, string $error): void
-    {
-        $updateData = $this->buildFailureUpdateData($error);
-
-        $message->update($updateData);
-
-        $this->logFailedSend($message, $error);
-    }
-
-    private function buildFailureUpdateData(string $error): array
-    {
-        return [
-            'status_id' => self::STATUS_FAILED,
-            'delivery_status' => self::DELIVERY_STATUS_FAILED,
-            'error_message' => $error
-        ];
-    }
-
-    private function logFailedSend(WhatsappMessage $message, string $error): void
-    {
-        Log::error('Failed to send WhatsApp message', [
-            'message_id' => $message->id,
-            'number' => $message->number,
-            'error' => $error
-        ]);
     }
 
     private function hasRecurrence(WhatsappMessage $message): bool

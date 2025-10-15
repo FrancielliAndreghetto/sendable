@@ -11,22 +11,16 @@ class UpdateWhatsappContactDTO extends BaseDTO
     public ?string $number = null;
     public ?string $image = null;
 
-    protected array $filled = [];
-
     public function __construct(array $data)
     {
-        foreach (['instance_id', 'name', 'number', 'image'] as $field) {
-            if (array_key_exists($field, $data)) {
-                $this->filled[] = $field;
-                $this->$field = $data[$field];
-            }
-        }
+        $this->instance_id = $data['instance_id'] ?? null;
+        $this->name = $data['name'] ?? null;
+        $this->number = $data['number'] ?? null;
+        $this->image = $data['image'] ?? null;
     }
 
     public function toArray(): array
     {
-        return collect($this->filled)
-            ->mapWithKeys(fn($field) => [$field => $this->$field])
-            ->all();
+        return $this->toArrayFiltered();
     }
 }

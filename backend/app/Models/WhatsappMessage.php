@@ -2,29 +2,25 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class WhatsappMessage extends Model
 {
-    use HasUuids;
+    use HasFactory, HasUuids;
 
     protected $table = 'whatsapp_messages';
     protected $keyType = 'string';
     public $incrementing = false;
 
-    public const RECURRENCE_DAILY = 'daily';
-    public const RECURRENCE_WEEKLY = 'weekly';
-    public const RECURRENCE_MONTHLY = 'monthly';
-    public const RECURRENCE_QUARTERLY = 'quarterly';
-    public const RECURRENCE_YEARLY = 'yearly';
-
     protected $fillable = [
         'partner_id',
         'instance_id',
-        'contact_id',
         'name',
-        'number',
         'message',
         'scheduled_date',
         'status_id',
@@ -38,21 +34,43 @@ class WhatsappMessage extends Model
     ];
 
     protected $casts = [
-        'is_recurring' => 'boolean',
         'recurrence_interval' => 'integer',
         'scheduled_date' => 'datetime',
         'next_send_at' => 'datetime',
+        'is_recurring' => 'boolean',
     ];
 
-    public function instance()
+    public function instance(): BelongsTo
     {
         return $this->belongsTo(WhatsappInstance::class, 'instance_id');
     }
 
-    public function contact()
+    public function contacts(): BelongsToMany
     {
-        return $this->belongsTo(WhatsappContact::class, 'contact_id');
+        return $this->belongsToMany(
+            WhatsappContact::class,
+            'whatsapp_message_contacts',
+            'message_id',
+            'contact_id'
+        )->withPivot([
+            'partner_id',
+            'status_id',
+            'delivery_status',
+            'error_message',
+            'sent_at'
+        ])->withTimestamps();
     }
+
+    public function messageContacts(): HasMany
+    {
+        return $this->hasMany(WhatsappMessageContact::class, 'message_id');
+    }
+
+    public const RECURRENCE_DAILY = 'daily';
+    public const RECURRENCE_WEEKLY = 'weekly';
+    public const RECURRENCE_MONTHLY = 'monthly';
+    public const RECURRENCE_QUARTERLY = 'quarterly';
+    public const RECURRENCE_YEARLY = 'yearly';
 
     public function isRecurring(): bool
     {

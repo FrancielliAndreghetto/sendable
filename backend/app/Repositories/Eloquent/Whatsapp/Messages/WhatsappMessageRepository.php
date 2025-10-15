@@ -24,6 +24,7 @@ class WhatsappMessageRepository implements WhatsappMessageRepositoryInterface
     {
         return $this->model->where('id', $uuid)
             ->where('partner_id', $partnerId)
+            ->with(['instance', 'contacts', 'messageContacts.contact'])
             ->first();
     }
 
@@ -31,7 +32,7 @@ class WhatsappMessageRepository implements WhatsappMessageRepositoryInterface
     {
         return $this->model
             ->where('partner_id', $partnerId)
-            ->with(['instance', 'contact'])
+            ->with(['instance', 'contacts', 'messageContacts.contact'])
             ->orderBy('created_at', 'desc')
             ->paginate($perPage, ['*'], 'page', $page);
     }

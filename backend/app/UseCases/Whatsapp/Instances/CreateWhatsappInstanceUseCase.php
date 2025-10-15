@@ -3,7 +3,6 @@
 namespace App\UseCases\Whatsapp\Instances;
 
 use App\DTOs\Whatsapp\Instances\CreateWhatsappInstanceDTO;
-use App\Models\WhatsappInstance;
 use App\Repositories\Contracts\Whatsapp\Instances\WhatsappInstanceRepositoryInterface;
 use App\Services\Whatsapp\Contracts\WhatsappInstanceServiceInterface;
 use Exception;
@@ -37,7 +36,7 @@ class CreateWhatsappInstanceUseCase
 
         $instance->update([
             'external_id' => $apiResponse['instance']['instanceId'] ?? null,
-            'external_name'   => $nameWithId,
+            'external_name' => $nameWithId,
         ]);
 
         return $instance->fresh();

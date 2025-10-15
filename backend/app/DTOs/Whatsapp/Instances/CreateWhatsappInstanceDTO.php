@@ -30,4 +30,9 @@ class CreateWhatsappInstanceDTO extends BaseDTO
             'token' => $this->token,
         ], $this->partner_id));
     }
+
+    public function toArray(): array
+    {
+        return $this->toArrayFiltered();
+    }
 }

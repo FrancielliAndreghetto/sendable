@@ -8,8 +8,7 @@ class CreateWhatsappMessageDTO extends BaseDTO
 {
     public string $instance_id;
     public ?array $contact_id;
-    public ?string $number;
-    public string $name;
+    public ?string $name;
     public string $message;
     public ?string $scheduled_date;
     public ?string $custom_code;
@@ -22,12 +21,11 @@ class CreateWhatsappMessageDTO extends BaseDTO
     public function __construct(array $data, $partnerId)
     {
         $this->instance_id = $data['instance_id'];
-        $this->contact_id = $data['contact_id'] ?? [];
-        $this->number = $data['number'] ?? null;
-        $this->name = $data['name'];
+        $this->contact_id = $data['contact_id'] ?? null;
+        $this->name = $data['name'] ?? null;
         $this->message = $data['message'];
         $this->scheduled_date = $data['scheduled_date'] ?? null;
-        $this->custom_code = $data['custom_code'];
+        $this->custom_code = $data['custom_code'] ?? null;
         $this->partner_id = $partnerId;
         $this->is_recurring = $data['is_recurring'] ?? false;
         $this->recurrence_type = $data['recurrence_type'] ?? null;
@@ -46,15 +44,13 @@ class CreateWhatsappMessageDTO extends BaseDTO
 
     public function toArray(): array
     {
-        return [
-            'instance_id' => $this->instance_id,
-            'contact_id' => $this->contact_id,
-            'number' => $this->number,
-            'name' => $this->name,
-            'message' => $this->message,
-            'scheduled_date' => $this->scheduled_date,
-            'custom_code' => $this->custom_code,
-            'partner_id' => $this->partner_id,
-        ];
+        $data = $this->toArrayFiltered(
+            excludeFields: ['contact_id']
+        );
+
+        $data['status_id'] = 0;
+        $data['is_recurring'] = $this->is_recurring;
+
+        return $data;
     }
 }

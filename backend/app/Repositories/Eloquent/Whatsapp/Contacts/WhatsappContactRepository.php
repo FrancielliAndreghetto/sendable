@@ -32,6 +32,13 @@ class WhatsappContactRepository implements WhatsappContactRepositoryInterface
             ->first();
     }
 
+    public function findByNumberAndPartner(string $number, string $partnerId): ?WhatsappContact
+    {
+        return $this->model->where('number', $number)
+            ->where('partner_id', $partnerId)
+            ->first();
+    }
+
     public function paginateByPartner(string $partnerId, int $perPage = 15, int $page = 1): LengthAwarePaginator
     {
         return $this->model
